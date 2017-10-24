@@ -91,8 +91,7 @@ for index, val in enumerate(c_A):
 plt.figure(figsize=(10, 6))
 plt.plot(timeX, serisB, 'g', label='serisB')
 for index, val in enumerate(c_A):
-    plt.plot(timeX, serisAList[index, :], 'r--', \
-             label='serisA MaxNDVI = ' + str(val))
+    plt.plot(timeX, serisAList[index, :], 'r--', label='serisA MaxNDVI = ' + str(val))
 plt.grid()
 plt.legend()
 plt.show()
@@ -113,8 +112,8 @@ im = ax.imshow(minusMatrix)
 # print(im)
 # create an axes on the right side of ax. The width of cax will be 5%
 # of ax and the padding between cax and ax will be fixed at 0.05 inch.
-ax.set_xlabel('Max A\'NDVI');
-ax.set_ylabel('Fa');
+ax.set_xlabel('Max A\'NDVI')
+ax.set_ylabel('Fa')
 ax.set_xticks(range(6))
 ax.set_yticks(range(11))
 ax.set_xticklabels(list(map(str, c_A)))
@@ -134,7 +133,7 @@ temp = minusMatrix.mean(axis=0)
 plt.plot(range(6), temp, 'ro--')
 ax = plt.gca()
 ax.set_ylabel('mix GUD')
-ax.set_xlabel('Max A\'NDVI');
+ax.set_xlabel('Max A\'NDVI')
 ax.set_xticklabels(list(map(str, c_A)))
 
 plt.show()
@@ -152,8 +151,7 @@ for index, val in enumerate(c_B):
 plt.figure(figsize=(10, 6))
 plt.plot(timeX, serisA, 'r', label='serisA')
 for index, val in enumerate(c_B):
-    plt.plot(timeX, serisBList[index, :], 'g--', \
-             label='serisB MaxNDVI = ' + str(val))
+    plt.plot(timeX, serisBList[index, :], 'g--',label='serisB MaxNDVI = ' + str(val))
 plt.grid()
 plt.legend()
 plt.show()
@@ -174,8 +172,8 @@ im = ax.imshow(minusMatrix)
 # print(im)
 # create an axes on the right side of ax. The width of cax will be 5%
 # of ax and the padding between cax and ax will be fixed at 0.05 inch.
-ax.set_xlabel('Max B\'NDVI');
-ax.set_ylabel('Fb');
+ax.set_xlabel('Max B\'NDVI')
+ax.set_ylabel('Fb')
 ax.set_xticks(range(6))
 ax.set_yticks(range(11))
 ax.set_xticklabels(list(map(str, c_B)))
@@ -195,7 +193,7 @@ plt.figure(figsize=(6, 6))
 plt.plot(range(6), minusMatrix.mean(axis=0), 'go--')
 ax = plt.gca()
 ax.set_ylabel('mix GUD')
-ax.set_xlabel('Max B\'NDVI');
+ax.set_xlabel('Max B\'NDVI')
 ax.set_xticklabels(list(map(str, c_B)))
 
 plt.show()
@@ -209,7 +207,7 @@ plt.plot(range(6), temp2, 'ro--')
 plt.grid()
 ax = plt.gca()
 ax.set_ylabel('mix GUD')
-ax.set_xlabel('Max A&B\'NDVI');
+ax.set_xlabel('Max A&B\'NDVI')
 ax.set_xticklabels(list(map(str, c_B)))
 plt.legend()
 plt.show()
