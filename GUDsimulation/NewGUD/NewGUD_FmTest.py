@@ -32,10 +32,9 @@ for val in serisFm:
 plt.plot(range(len(serisFmGUDsA)),serisFmGUDsA,'ro--')
 plt.title('NDVImax')
 
+print(serisFmGUDsA)
 '''
-
 For B :
-    
 '''
 
 
@@ -64,3 +63,5 @@ serisFmGUDsB =  - (serisFmGUDsB - serisFmGUDsB[-1])[::-1]
 plt.figure()
 plt.plot(range(fmNum),serisFmGUDsA,'bo-',range(fmNum),serisFmGUDsB,'ro-')
 plt.show()
+
+print("serisMaturityPeriodGUDs")

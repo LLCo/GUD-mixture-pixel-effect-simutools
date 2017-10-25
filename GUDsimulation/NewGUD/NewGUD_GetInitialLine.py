@@ -127,6 +127,7 @@ def test():
     plt.show()
     return
 
+'''
 serisA,serisB = getInitialAB()
 
 a,b,c,d,a_down,b_down = timeSerisShift(\
@@ -157,3 +158,4 @@ plt.plot(range(366),timeSerisB,'--')
 plt.plot(range(366),serisA)
 plt.plot(range(366),serisB)
 plt.show()
+'''
