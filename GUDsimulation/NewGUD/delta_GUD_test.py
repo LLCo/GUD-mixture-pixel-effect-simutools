@@ -58,18 +58,19 @@ for i in range(fmLen):
 for i in range(fmLen):
     for j in range(timeLen):
         fixlistGUD[i,j] = NewGUD_GUD.phenology(fixlist[i,j])
-        print(fixlistGUD[i,j])
-
+        #print(fixlistGUD[i,j])
+'''
 plt.figure(figsize = (10,10))
 ax = plt.gca()
 im = ax.imshow(fixlistGUD)
+'''
 
 for i in range(fmLen):
-    fixlist[i] = fm[i] * Blist + (1 - fm[i]) * Alist[0]
+    fixlist[i] = fm[i] * Alist + (1 - fm[i]) * Blist[0]
 for i in range(fmLen):
     for j in range(timeLen):
         fixlistGUD[i,j] = NewGUD_GUD.phenology(fixlist[i,j])
-        print(fixlistGUD[i,j])
+        #print(fixlistGUD[i,j])
 
 plt.figure(figsize = (10,10))
 ax = plt.gca()
@@ -90,9 +91,11 @@ ax.set_yticklabels(label)
 plt.title('mix GUD')
 
 '''
-
 divider = make_axes_locatable(ax)
 cax = divider.append_axes("right", size="5%", pad=0.05)
 plt.colorbar(im, cax=cax)
 plt.show()
         
+print(fixlistGUD[9])
+print(fixlistGUD[5])
+print(fixlistGUD[3])

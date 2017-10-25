@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
 '''
 Shift Test:
     
@@ -14,16 +16,16 @@ get initial parameter
 a,b,c,d,a_down,b_down
 
 '''
-    
-serisA,serisB = NewGUD_GetInitialLine.getInitialAB()
-serisAParameter = NewGUD_GetInitialLine.initialAParameter
+
+#B
+serisB,serisA = NewGUD_GetInitialLine.getInitialAB()
 serisBParameter = NewGUD_GetInitialLine.initialBParameter
 
 shift_NDVImax = np.arange(0,0.51,0.1)
 shift_NDVImin = np.arange(0,0.21,0.05)
-shift_time = np.arange(0,-20,-4)
+shift_time = np.arange(0,20,4)
+print(shift_time)
 shift_MaturityPeriod = np.arange(0,1.1,0.2)
-
 
 '''
 NDVImaxShift
@@ -34,12 +36,12 @@ ax = plt.subplot(221)
 serisNDVImax = np.zeros([len(shift_NDVImax),366])
 for index,val in enumerate(shift_NDVImax):
     a,b,c,d,a_down,b_down = NewGUD_GetInitialLine.NDVImaxShift(\
-                                        serisAParameter['a'],\
-                                        serisAParameter['b'],\
-                                        serisAParameter['c'],\
-                                        serisAParameter['d'],\
-                                        serisAParameter['a_down'],\
-                                        serisAParameter['b_down'],
+                                        serisBParameter['a'],\
+                                        serisBParameter['b'],\
+                                        serisBParameter['c'],\
+                                        serisBParameter['d'],\
+                                        serisBParameter['a_down'],\
+                                        serisBParameter['b_down'],
                                         shift = val)
     serisNDVImax[index,:] = NewGUD_GetInitialLine.getInitialLine(a,b,c,d,a_down,b_down)
     ax.plot(range(366),serisNDVImax[index,:],color = (index/(len(shift_NDVImax)),1,0))
@@ -54,51 +56,55 @@ ax = plt.subplot(222)
 serisNDVImin = np.zeros([len(shift_NDVImin),366])
 for index,val in enumerate(shift_NDVImin):
     a,b,c,d,a_down,b_down = NewGUD_GetInitialLine.NDVIminShift(\
-                                        serisAParameter['a'],\
-                                        serisAParameter['b'],\
-                                        serisAParameter['c'],\
-                                        serisAParameter['d'],\
-                                        serisAParameter['a_down'],\
-                                        serisAParameter['b_down'],
+                                        serisBParameter['a'],\
+                                        serisBParameter['b'],\
+                                        serisBParameter['c'],\
+                                        serisBParameter['d'],\
+                                        serisBParameter['a_down'],\
+                                        serisBParameter['b_down'],
                                         shift = val)
     serisNDVImin[index,:] = NewGUD_GetInitialLine.getInitialLine(a,b,c,d,a_down,b_down)
     ax.plot(range(366),serisNDVImin[index,:],color = (index/(len(shift_NDVImax)),1,0))
     ax.set_title('NDVImin')
 ax.plot(range(366),serisB,'r--')
 '''
-NDVIminShift
+NDVI timeSerisShift
 '''
 ax = plt.subplot(223)
 serisTime = np.zeros([len(shift_time),366])
 for index,val in enumerate(shift_time):
     a,b,c,d,a_down,b_down = NewGUD_GetInitialLine.timeSerisShift(\
-                                        serisAParameter['a'],\
-                                        serisAParameter['b'],\
-                                        serisAParameter['c'],\
-                                        serisAParameter['d'],\
-                                        serisAParameter['a_down'],\
-                                        serisAParameter['b_down'],
+                                        serisBParameter['a'],\
+                                        serisBParameter['b'],\
+                                        serisBParameter['c'],\
+                                        serisBParameter['d'],\
+                                        serisBParameter['a_down'],\
+                                        serisBParameter['b_down'],
                                         shift = val)
     serisTime[index,:] = NewGUD_GetInitialLine.getInitialLine(a,b,c,d,a_down,b_down)
     ax.plot(range(366),serisTime[index,:],color = (index/(len(shift_NDVImax)),1,0))
     ax.set_title('TimeGUD')
 ax.plot(range(366),serisB,'r--')
 '''
-NDVIminShift
+NDVI maturityPeriod
 '''
 
 ax = plt.subplot(224)
 serisMaturityPeriod = np.zeros([len(shift_MaturityPeriod),366])
 for index,val in enumerate(shift_MaturityPeriod):
     a,b,c,d,a_down,b_down = NewGUD_GetInitialLine.maturityPeriodShift(\
-                                        serisAParameter['a'],\
-                                        serisAParameter['b'],\
-                                        serisAParameter['c'],\
-                                        serisAParameter['d'],\
-                                        serisAParameter['a_down'],\
-                                        serisAParameter['b_down'],
+                                        serisBParameter['a'],\
+                                        serisBParameter['b'],\
+                                        serisBParameter['c'],\
+                                        serisBParameter['d'],\
+                                        serisBParameter['a_down'],\
+                                        serisBParameter['b_down'],\
+                                        GUD = 140,\
                                         shift = val)
     serisMaturityPeriod[index,:] = NewGUD_GetInitialLine.getInitialLine(a,b,c,d,a_down,b_down)
+    print(val)
+    print(serisMaturityPeriod)
+    print(index/(len(shift_NDVImax)))
     ax.plot(range(366),serisMaturityPeriod[index,:],color = (index/(len(shift_NDVImax)),1,0))
     ax.set_title('MaturityPeriod')
 ax.plot(range(366),serisB,'r--')
@@ -155,11 +161,16 @@ for index in serisNDVImax:
 ax1.plot(range(len(serisNDVImaxGUDs)),serisNDVImaxGUDs,'ro--')
 ax1.set_title('NDVImax')
 
+
+
 serisNDVIminGUDs = []
 for index in serisNDVImin:
     serisNDVIminGUDs.append(NewGUD_GUD.phenology(index))
 ax2.plot(range(len(serisNDVIminGUDs)),serisNDVIminGUDs,'go--')
 ax2.set_title('NDVIminGUD')
+
+print(serisNDVImin)
+print(serisNDVIminGUDs)
 
 serisTimeGUDs = []
 for index in serisTime:
@@ -167,11 +178,16 @@ for index in serisTime:
 ax3.plot(range(len(serisTimeGUDs)),serisTimeGUDs,'bo--')
 ax3.set_title('TimeGUD')
 
+
 serisMaturityPeriodGUDs = []
 for index in serisMaturityPeriod:
     serisMaturityPeriodGUDs.append(NewGUD_GUD.phenology(index))
 ax4.plot(range(len(serisMaturityPeriodGUDs)),serisMaturityPeriodGUDs,'ko--')
 ax4.set_title('MaturityPeriod')
+
+print(serisMaturityPeriod)
+print(serisMaturityPeriodGUDs)
+
 
 print("NDVImax")
 print(serisNDVImaxGUDs)

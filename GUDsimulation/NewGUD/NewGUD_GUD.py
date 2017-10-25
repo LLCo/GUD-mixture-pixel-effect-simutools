@@ -40,7 +40,7 @@ def getMatrixGUD(timeSeris):
     #print(GUD)
     #print(np.argmax(derivative3))
     #return(GUD,derivative2,derivative,derivative3)
-    GUDnew = GUD / float(363) * 366
+    GUDnew = GUD
     return(GUD,derivative3,GUDnew)
 
 def logistic4(x, A, B, C, D):
@@ -128,7 +128,7 @@ def phenology(NDVI):
     plt.axvline(GUD,ls="--",color="r")
     plt.show()
     '''
-    
-    return(round(GUDnew))
+    return(GUDnew)
+    #return(round(GUDnew))
     
     
