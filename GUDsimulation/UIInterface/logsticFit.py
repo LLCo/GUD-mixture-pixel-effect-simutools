@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 import timeseris
 
+
 '''
 
 目前暂时是前端和后端单独拟合后使用其系数
@@ -86,19 +87,20 @@ def curve_fit(NDVI):
     totalLine = timeseris.merge_lines(regress_line_up ,regress_line_down)
     
     
-
+    '''
     p0 = [10,-0.007,0.7,0.1,-27,0.009]
     regress_parameter = Logistic_regressNew(x,NDVI,p0)
     print(regress_parameter)
     regress_line = pevalNew(x, regress_parameter)
     
-    plt.figure() 
-    
+
+    plt.figure(figsize = (10,10)) 
     plt.plot(range(len(NDVI)),NDVI,lw=4)
     plt.plot(range(len(regress_line)),regress_line)
     plt.plot(range(len(totalLine)),totalLine)
+    plt.title('logis')
     plt.show()
-
+    '''
 
     
     '''
@@ -110,4 +112,4 @@ def curve_fit(NDVI):
     plt.show()
     '''
 
-    return [regress_line_up,regress_line_down,regress_line]
+    return [regress_line_up,regress_line_down,totalLine]

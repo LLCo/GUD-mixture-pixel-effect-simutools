@@ -43,7 +43,7 @@ def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同�
         1、原始的拟合后的混合时序变化图
         2、一阶倒数
         3、二阶倒数
-        4、三阶倒数
+        4、三阶倒
         5、返青期直线
     '''
     plt.figure()
@@ -128,13 +128,16 @@ def main(input_value, fa = [0.3,0.3,0.4], txt_flag = False):
         logsticFit.curve_fit(mixline[-1]) #获取到了拟合后的像素
     __drawOne(mixline,totalLine,STEP) #画出第一条显示的图像
     
-    [GUD,derivative,derivative2,derivative3] = GUDcaculate(totalLine)
+    [GUD,derivative,derivative2,derivative3] = GUDcaculate(regress_line_up)
     __drawTwo(GUD,derivative,derivative2,derivative3,totalLine,STEP)
     
     #return '3'
 
+
 if __name__ == "__main__" :
-    #print(timeseris.initialAParameter)
+    '''
+    print(timeseris.initialAParameter)
+    '''
     a = [[10,-0.007,0.7,0.1,-27,0.009],[9,-0.007,0.7,0.1,-27,0.009],[11,-0.007,0.7,0.1,-27,0.009]]
     a = np.array(a)
     main(a)
