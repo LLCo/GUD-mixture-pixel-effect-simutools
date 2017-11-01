@@ -40,6 +40,9 @@ plt.plot(range(num),serisB,'b')
 plt.plot(range(num),serisAShift20,'r--')
 plt.plot(range(num),serisBShift20,'b--')
 
+print(NewGUD_GUD.phenology(serisA))
+print(NewGUD_GUD.phenology(serisAShift20))
+
 val = 0.2
 serisFm = val * serisA + (1 - val) * serisB
 a = NewGUD_GUD.phenology(serisFm)

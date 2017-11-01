@@ -52,3 +52,9 @@ t = np.linspace(1, 3600 * 24 * 28, 13)
 plt.plot(t, func(t, *popt), label="Fitted Curve")
 plt.legend(loc='upper left')
 plt.show()
+
+def testFun(a =1,b=1,c=1):
+    return a+b+c
+
+print(testFun(1,2,3))
+print(testFun(1,2))
