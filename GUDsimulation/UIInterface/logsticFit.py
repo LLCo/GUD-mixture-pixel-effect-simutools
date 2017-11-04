@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
@@ -34,7 +35,6 @@ def pevalNew(x, p):
     A, B, C, D,A_down,B_down = p
     return logistic4New(x, A, B, C, D,A_down,B_down)
 
-
 def logistic4(x, A, B, C, D):
     """4PL lgoistic equation."""
     
@@ -63,7 +63,6 @@ def peval(x, p):
 def Logistic_regress(x,y,p0):
     plsq = leastsq(residuals, p0, args=(y, x)) #maxfev = 1000
     return plsq[0]
-
 
 def curve_fit(NDVI):
     
