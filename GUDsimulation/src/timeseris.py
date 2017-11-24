@@ -85,7 +85,7 @@ def test():
         initialAParameter['b_down'],
         shift=30)
 
-    print(a, b, c, d, a_down, b_down)
+    # print(a, b, c, d, a_down, b_down)
     timeSerisB = get_initial_line(
         initialBParameter['a'], \
         initialBParameter['b'], \

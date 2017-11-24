@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.optimize import leastsq
 import timeseris
-
 
 '''
 
@@ -53,10 +51,10 @@ def residuals(p, y, x):
 def peval(x, p):
     """Evaluated value at x with current parameters."""
     A,B,C,D = p
-    print(A)
-    print(B)
-    print(C)
-    print(D)
+    # print(A)
+    # print(B)
+    # print(C)
+    # print(D)
     
     return logistic4(x, A, B, C, D)
 
@@ -77,13 +75,13 @@ def curve_fit(NDVI):
     
     regress_parameter_up = Logistic_regress(x[0:NDVI_max_index],Y_NDVI1,p0Up)
     regress_parameter_down = Logistic_regress(x[NDVI_max_index:],Y_NDVI2,p0Down)
-    print(regress_parameter_up)
-    print(regress_parameter_down)
+    # print(regress_parameter_up)
+    # print(regress_parameter_down)
   
     regress_line_up = peval(range(Num),regress_parameter_up)
     regress_line_down = peval(range(Num),np.array(regress_parameter_down))
 
-    totalLine = timeseris.merge_lines(regress_line_up ,regress_line_down)
+    totalLine = timeseris.merge_lines(regress_line_up, regress_line_down)
     
     
     '''

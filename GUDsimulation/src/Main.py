@@ -7,11 +7,11 @@ Function:
             2.mix NDVI time seris map
             3.Curve Fit NDVI time seris map
 """
-import numpy as np
-import sys
 import matplotlib.pyplot as plt
+import numpy as np
 import timeseris
 import logsticFit
+
 
 def getFirstMaxValue(line):
     valTemp = -1000
@@ -142,10 +142,10 @@ def __read_txt(txt_path,STEP):
     输入原始NDVI时序数据，获得混合曲线
     '''
     array = np.arange(0,STEP,1)
-    print(txt_path);
+    # print(txt_path);
     return array
 
-def __allOrinTimeseris(input_value, STEP, fa = [0.3,0.3,0.4]):
+def allOrinTimeseris(input_value, STEP, fa = [0.3,0.3,0.4]):
     '''
     输入原始NDVI参数，获得混合曲线
     '''
@@ -174,15 +174,15 @@ def main(input_value, fa = [0.3,0.3,0.4],thre = 0.09, txt_flag = False):
     if txt_flag:
         input_value = __read_txt(input_value,STEP)
     input_value = np.array(input_value)
-    mixline = __allOrinTimeseris(input_value,STEP, fa=fa) #获取到了输入各种参数后的混合光谱\
+    mixline = allOrinTimeseris(input_value,STEP, fa=fa) #获取到了输入各种参数后的混合光谱\
 
     regress_line_up,regress_line_down,totalLine = logsticFit.curve_fit(mixline[-1]) #获取到了拟合后的像素
-    __drawOne(mixline,totalLine,STEP) #画出第一条显示的图像
+    __drawOne(mixline, totalLine, STEP) #画出第一条显示的图像
     '''
     计算混合NDVI光谱的GUD
     '''
     [GUDmix,derivative,derivative2,derivative3] = GUDcaculate(regress_line_up)
-    [GUDthre, threValue] = GUDThreCaculate(regress_line_up, thre)
+    [GUDthre, threValue] = GUDThreCaculate(mixline[-1], thre)
     __drawTwo(GUDmix,derivative,derivative2,derivative3,totalLine,STEP)
     '''
     原始光谱的GUD
@@ -205,7 +205,7 @@ if __name__ == "__main__" :
     '''
     print(timeseris.initialAParameter)
     '''
-    print(sys.path)
+    # print(sys.path)
     a = [[10,-0.007,0.7,0.1,-27,0.009],[9,-0.007,0.7,0.1,-27,0.009],[11,-0.007,0.7,0.1,-27,0.009]]
     b = [[10.0, -0.007, 0.7, 0.1, -27.0, 0.009], [10.7, -0.007, 0.7, 0.1, -27.9, 0.009]]
     fa = [0.5, 0.5]

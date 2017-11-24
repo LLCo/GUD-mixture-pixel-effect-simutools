@@ -2,21 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-ZetCode PyQt5 tutorial
+simulation software ：Calculate the mix pixel affect of GUD inversion
 
-In this example, we create a simple
-window in PyQt5.
-
-Author: Jan Bodnar
-Website: zetcode.com
-Last edited: August 2017
+Author: Liu Li cong
+Last edited: Nov 2017
 """
 
-import sys
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QWidget, QListWidgetItem, QHBoxLayout, QListWidget, QPushButton, QVBoxLayout, QGroupBox,\
+    QLabel, QTextEdit, QMessageBox, QRadioButton, QApplication, QLineEdit, QFileDialog
 from Main import *
+import sys
+
 
 class ParameterItem(QListWidgetItem):
 
@@ -30,6 +27,7 @@ class ParameterItem(QListWidgetItem):
         self.b_down = b_down
         self.weight = weight
         self.parameter = [a,b,c,d,a_down,b_down]
+
 
 class PyQtMain(QWidget):
 
@@ -188,6 +186,7 @@ class PyQtMain(QWidget):
             self.console.append(tstr)
             self.console.append("This thre line GUD is :" + str(GUDthreothers[i]/10) + 'day')
         self.console.append("the mix thre lenght GUD is :" + str(GUDthre / 10) + 'day')
+
 
 class InputWin(QWidget):
     def __init__(self, context:PyQtMain):
