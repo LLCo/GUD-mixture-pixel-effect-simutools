@@ -97,6 +97,8 @@ class PyQtMain(QWidget):
         self.plotLabel1.setFixedSize(450,300)
         self.plotLabel2 = QLabel()
         self.plotLabel2.setFixedSize(500,300)
+        self.plotLabel3 = QLabel()
+        self.plotLabel3.setFixedSize(500,300)
         '''
         pixMap1 = QPixmap('drawOne.png')
         pixMap2 = QPixmap('drawTwo.png')
@@ -106,9 +108,10 @@ class PyQtMain(QWidget):
         qhl1 = QHBoxLayout()
         qhl1.addWidget(self.plotLabel1)
         qhl1.addWidget(self.plotLabel2)
+        qhl1.addWidget(self.plotLabel3)
         inputGroup2 = QGroupBox()
         inputGroup2.setLayout(qhl1)
-        inputGroup2.setFixedSize(900, 350)
+        inputGroup2.setFixedSize(1500, 350)
         inputGroup2.setTitle('image')
 
         self.console = QTextEdit()
@@ -153,27 +156,38 @@ class PyQtMain(QWidget):
             inputList.append(item.parameter)
             weightList.append(item.weight)
         weightList = list(map(lambda x:x/sum(weightList), weightList))
-        GUDmix, GUDothers = main(inputList, fa=weightList)
+        [GUDmix, GUDothers, GUDthre, GUDthreothers] = main(inputList, fa=weightList)
         pixMap1 = QPixmap('drawOne.png')
         pixMap2 = QPixmap('drawTwo.png')
+        pixMap3 = QPixmap('drawThree.png')
         self.plotLabel1.setPixmap(pixMap1)
         self.plotLabel2.setPixmap(pixMap2)
-        self.consoleOperation(inputList,weightList,GUDmix,GUDothers)
+        self.plotLabel3.setPixmap(pixMap3)
+        self.consoleOperation(inputList,weightList,GUDmix,GUDothers, GUDthre, GUDthreothers)
 
     def clearClick(self):
         self.plotLabel1.setPixmap(QPixmap())
         self.plotLabel2.setPixmap(QPixmap())
+        self.plotLabel3.setPixmap(QPixmap())
         self.console.setText('')
 
-    def consoleOperation(self,inputList,weightList,GUDmix,GUDothers):
+    def consoleOperation(self,inputList,weightList,GUDmix,GUDothers, GUDthre, GUDthreothers):
         self.console.append("--------------------------------------")
         for i in range(len(GUDothers)):
             tstr = ' a: ' + str(inputList[i][0]) + ' b: ' + str(inputList[i][1]) + ' c: ' + str(inputList[i][2])+ \
                    ' d: ' + str(inputList[i][3]) + ' a_down: ' + str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])\
                 +' Weight: ' + str(weightList[i])
             self.console.append(tstr)
-            self.console.append("This line GUD is :" + str(GUDothers[i]/10) + 'day')
-        self.console.append("the mix lenght GUD is :" + str(GUDmix/10) + 'day')
+            self.console.append("This derivation line GUD is :" + str(GUDothers[i]/10) + 'day')
+        self.console.append("the mix derivation lenght GUD is :" + str(GUDmix/10) + 'day\n')
+
+        for i in range(len(GUDothers)):
+            tstr = ' a: ' + str(inputList[i][0]) + ' b: ' + str(inputList[i][1]) + ' c: ' + str(inputList[i][2])+ \
+                   ' d: ' + str(inputList[i][3]) + ' a_down: ' + str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])\
+                +' Weight: ' + str(weightList[i])
+            self.console.append(tstr)
+            self.console.append("This thre line GUD is :" + str(GUDthreothers[i]/10) + 'day')
+        self.console.append("the mix thre lenght GUD is :" + str(GUDthre / 10) + 'day')
 
 class InputWin(QWidget):
     def __init__(self, context:PyQtMain):
@@ -336,7 +350,7 @@ class InputWin(QWidget):
 
         self.a_downEdit = QTextEdit()
         self.a_downEdit.setFixedSize(80, 30)
-        self.a_downEdit.setText('-27')
+        self.a_downEdit.setText('-24.3')
         a_downLabel = QLabel('a_down:')
         a_downLabel.setFixedSize(80, 30)
 

@@ -22,6 +22,13 @@ def getFirstMaxValue(line):
             valTemp = line[i]
     return(-1)
 
+def GUDThreCaculate(timeSeris, thre = 0.09):
+    threValue = (np.max(timeSeris) - np.min(timeSeris)) * thre + np.min(timeSeris)
+    for i in range(len(timeSeris)):
+        if timeSeris[i] > threValue:
+            return [i, threValue]
+    return
+
 def GUDcaculate(timeSeris):
     shape = np.shape(timeSeris)
     minusShape = list(shape)
@@ -58,6 +65,22 @@ def drawPreview(parameter,name):
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
     plt.xticks(np.int16(np.linspace(0,3660,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
     plt.savefig(name)
+
+def __drawThree(totalLine,GUDthre,threValue,thre):
+        
+    plt.figure(figsize=(5, 3))
+    plt.title('GUD caculate')
+    plt.xlabel('Day of year')
+    plt.ylabel('NDVI')
+    plt.plot(range(len(totalLine)),totalLine,'r-',lw = 2,label='orin')
+    plt.ylim([0, 1]);
+    plt.xlim([0, 3660]);
+    plt.axvline(GUDthre,ls = '--',lw = 3,label='GUD: ' + str(int(GUDthre/10)) + ' day')
+    plt.axhline(threValue,ls = '--',lw = 2,color = 'r',label='%' + str(thre * 100) + ' NDVI')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
+    plt.xticks(np.int16(np.linspace(0,3657,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
+    plt.legend(loc ='upper left')
+    plt.savefig("drawThree.png")
 
 def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同的原始曲线
     '''
@@ -146,7 +169,7 @@ def __allOrinTimeseris(input_value, STEP, fa = [0.3,0.3,0.4]):
     
     return mixline
 
-def main(input_value, fa = [0.3,0.3,0.4], txt_flag = False):
+def main(input_value, fa = [0.3,0.3,0.4],thre = 0.09, txt_flag = False):
     STEP = 3660
     if txt_flag:
         input_value = __read_txt(input_value,STEP)
@@ -159,17 +182,23 @@ def main(input_value, fa = [0.3,0.3,0.4], txt_flag = False):
     计算混合NDVI光谱的GUD
     '''
     [GUDmix,derivative,derivative2,derivative3] = GUDcaculate(regress_line_up)
+    [GUDthre, threValue] = GUDThreCaculate(regress_line_up, thre)
     __drawTwo(GUDmix,derivative,derivative2,derivative3,totalLine,STEP)
     '''
     原始光谱的GUD
     '''
+    __drawThree(totalLine,GUDthre,threValue,thre) #画出第一条显示的图像
+    
     GUDothers = []
+    GUDthreothers = []
     for i in range(mixline.shape[0] - 1):
         regress_line_up, regress_line_down, totalLine = logsticFit.curve_fit(mixline[i])  # 获取到了拟合后的像素
         [GUDa, derivative, derivative2, derivative3] = GUDcaculate(regress_line_up)
+        [GUDb, threValue] = GUDThreCaculate(regress_line_up, thre)
         GUDothers.append(GUDa)
+        GUDthreothers.append(GUDb)
 
-    return [GUDmix, GUDothers]
+    return [GUDmix, GUDothers, GUDthre, GUDthreothers]
 
 
 if __name__ == "__main__" :
