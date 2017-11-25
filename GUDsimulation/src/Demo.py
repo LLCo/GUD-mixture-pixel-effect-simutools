@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
+import matplotlib.pyplot as plt
 
 
-def GUDThreCaculate(timeSeris, thre = 0.09):
-    threValue = np.max(timeSeris) * thre
-    for i in range(len(timeSeris)):
-        if timeSeris(i) > threValue:
-            return [float(i)/10, threValue]
-    return
+x = [1, 2, 3, 4]
+y = [1, 4, 9, 6]
+labels = ['Frogs', 'Hogs', 'Bogs', 'Slogs']
 
-GUDThreCaculate([1,2,3,4,5])
+plt.plot(x, y, 'ro')
+# You can specify a rotation for the tick labels in degrees or with keywords.
+plt.xticks(x, labels, rotation='vertical')
+# Pad margins so that markers don't get clipped by the axes
+plt.margins(0.8)
+# Tweak spacing to prevent clipping of tick-labels
+plt.subplots_adjust(bottom=0.15)
+plt.show()

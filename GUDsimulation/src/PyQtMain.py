@@ -10,14 +10,14 @@ Last edited: Nov 2017
 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QHBoxLayout, QListWidget, QPushButton, QVBoxLayout, QGroupBox,\
-    QLabel, QTextEdit, QMessageBox, QRadioButton, QApplication, QLineEdit, QFileDialog
+    QLabel, QTextEdit, QMessageBox, QRadioButton, QApplication, QLineEdit, QFileDialog,QGridLayout
 from Main import *
 import sys
 
 
 class ParameterItem(QListWidgetItem):
 
-    def __init__(self, str, a=10, b=-0.007, c=0.7, d=0.1, a_down=-27, b_down=0.009, weight=1):
+    def __init__(self, str, a=11.105, b=-0.008, c=0.7, d=0.1, a_down=-24.3, b_down=0.009, weight=1):
         QListWidgetItem.__init__(self, str)
         self.a = a
         self.b = b
@@ -57,11 +57,11 @@ class PyQtMain(QWidget):
         # Create an empty model for the list's data
         #self.view.setModel(self.model)
 
-        self.Btn_import = QPushButton('import')
+        self.Btn_import = QPushButton('Import')
         self.Btn_import.clicked.connect(self.btnimport)
         self.Btn_import.setFixedSize(200, 40)
 
-        self.Btn_delete = QPushButton('delete')
+        self.Btn_delete = QPushButton('Delete')
         self.Btn_delete.clicked.connect(self.btndelete)
         self.Btn_delete.setFixedSize(200, 40)
 
@@ -73,13 +73,13 @@ class PyQtMain(QWidget):
         inputGroup0 = QGroupBox()
         inputGroup0.setLayout(self.qgl)
         inputGroup0.setFixedSize(220, 450)
-        inputGroup0.setTitle('NDVI time seris')
+        inputGroup0.setTitle('NDVI Time Seris')
 
         self.Btn_Draw = QPushButton('Draw')
         self.Btn_Draw.clicked.connect(self.btndraw)
         self.Btn_Draw.setFixedSize(100, 40)
 
-        self.Btn_Clear = QPushButton('Clear~')
+        self.Btn_Clear = QPushButton('Clear')
         self.Btn_Clear.clicked.connect(self.clearClick)
         self.Btn_Clear.setFixedSize(100, 40)
 
@@ -89,7 +89,7 @@ class PyQtMain(QWidget):
         inputGroup1 = QGroupBox()
         inputGroup1.setLayout(self.qgl2)
         inputGroup1.setFixedSize(150, 450)
-        inputGroup1.setTitle('operation button')
+        inputGroup1.setTitle('Action Buttons')
 
         self.plotLabel1 = QLabel()
         self.plotLabel1.setFixedSize(450,300)
@@ -103,6 +103,7 @@ class PyQtMain(QWidget):
         self.plotLabel1.setPixmap(pixMap2)
         self.plotLabel2.setPixmap(pixMap1)
         '''
+        '''
         qhl1 = QHBoxLayout()
         qhl1.addWidget(self.plotLabel1)
         qhl1.addWidget(self.plotLabel2)
@@ -110,7 +111,7 @@ class PyQtMain(QWidget):
         inputGroup2 = QGroupBox()
         inputGroup2.setLayout(qhl1)
         inputGroup2.setFixedSize(1500, 350)
-        inputGroup2.setTitle('image')
+        inputGroup2.setTitle('Image Result')
 
         self.console = QTextEdit()
         self.console.setReadOnly(True)
@@ -118,8 +119,19 @@ class PyQtMain(QWidget):
         inputGroup3.setLayout(QVBoxLayout())
         inputGroup3.layout().addWidget(inputGroup2)
         inputGroup3.layout().addWidget(self.console)
-        inputGroup3.setTitle('output')
-
+        inputGroup3.setTitle('Output')
+        '''
+        self.console = QTextEdit()
+        self.console.setReadOnly(True)
+        inputGroup3 = QGroupBox()
+        grid = QGridLayout()
+        inputGroup3.setLayout(grid)
+        grid.setSpacing(10)
+        grid.addWidget(self.plotLabel1, 1, 0)
+        grid.addWidget(self.plotLabel2, 0, 1)
+        grid.addWidget(self.plotLabel3, 0, 0)
+        grid.addWidget(self.console, 1, 1)
+        inputGroup3.setTitle('Output')
 
         self._layout.addWidget(inputGroup0)
         self._layout.addWidget(inputGroup1)
@@ -134,11 +146,14 @@ class PyQtMain(QWidget):
 
     def btndelete(self):
         # 移除
+        '''
         if QMessageBox.warning(self, u'OK', u'Are you sure delete?', QMessageBox.Ok | QMessageBox.Cancel) == QMessageBox.Ok:
             item_deleted = self.view.takeItem(self.view.currentRow())
             # 将读取的值设置为None
             item_deleted = None
             print('delelte success!')
+        '''
+        item_deleted = self.view.takeItem(self.view.currentRow())
 
     def btndraw(self):
 
@@ -172,20 +187,18 @@ class PyQtMain(QWidget):
     def consoleOperation(self,inputList,weightList,GUDmix,GUDothers, GUDthre, GUDthreothers):
         self.console.append("--------------------------------------")
         for i in range(len(GUDothers)):
-            tstr = ' a: ' + str(inputList[i][0]) + ' b: ' + str(inputList[i][1]) + ' c: ' + str(inputList[i][2])+ \
-                   ' d: ' + str(inputList[i][3]) + ' a_down: ' + str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])\
-                +' Weight: ' + str(weightList[i])
+            tstr0 = 'The ' + str(i+1) + 'th line'
+            tstr = tstr0 + "'s parameter is->\n  a: " + str(inputList[i][0]) + ' b: ' + \
+                   str(inputList[i][1]) + ' c: ' + str(inputList[i][2])+ \
+                   ' d: ' + str(inputList[i][3]) + ' a_down: ' + \
+                   str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])+\
+                   ' Weight: ' + str(weightList[i])
             self.console.append(tstr)
-            self.console.append("This derivation line GUD is :" + str(GUDothers[i]/10) + 'day')
-        self.console.append("the mix derivation lenght GUD is :" + str(GUDmix/10) + 'day\n')
+            self.console.append(tstr0 + "'s threshold GUD is :" + str(GUDothers[i] / 10) + 'day')
+            self.console.append(tstr0 + "'s curvature GUD is :" + str(GUDthreothers[i]/10) + 'day\n')
 
-        for i in range(len(GUDothers)):
-            tstr = ' a: ' + str(inputList[i][0]) + ' b: ' + str(inputList[i][1]) + ' c: ' + str(inputList[i][2])+ \
-                   ' d: ' + str(inputList[i][3]) + ' a_down: ' + str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])\
-                +' Weight: ' + str(weightList[i])
-            self.console.append(tstr)
-            self.console.append("This thre line GUD is :" + str(GUDthreothers[i]/10) + 'day')
-        self.console.append("the mix thre lenght GUD is :" + str(GUDthre / 10) + 'day')
+        self.console.append("Mix threshold GUD is :" + str(GUDmix/10) + 'day')
+        self.console.append("Mix curvature GUD is :" + str(GUDthre/10) + 'day')
 
 
 class InputWin(QWidget):
@@ -198,14 +211,15 @@ class InputWin(QWidget):
         if self._parameterButton.isChecked():
             self.inputGroup1.setEnabled(True)
             self.inputGroup2.setEnabled(False)
-
+            self.inputGroup4right.setEnabled(True)
             print('_parameterButton')
         else:
             self.inputGroup2.setEnabled(True)
             self.inputGroup1.setEnabled(False)
+            self.inputGroup4right.setEnabled(False)
             print('_txtButton')
 
-    def __timeShiftClick(self, value = 100):
+    def __timeShiftClick(self, value=60):
         inputData = self.__getInputData()[0]
         inputData[0] = inputData[0] - value * inputData[1]
         inputData[4] = inputData[4] - value * inputData[5]
@@ -214,14 +228,14 @@ class InputWin(QWidget):
         self.perviewClick()
         print('time shift!')
 
-    def __NDVImaxShiftClick(self, value = 0.1):
+    def __NDVImaxShiftClick(self, value = 0.05):
         inputData = self.__getInputData()[0]
         inputData =  [inputData[0], inputData[1], inputData[2] - value, inputData[3], inputData[4], inputData[5]]
         self.__setInputData(inputData)
         self.perviewClick()
         print('max shift!')
 
-    def __NDVIminShiftClick(self, value = 0.1):
+    def __NDVIminShiftClick(self, value = 0.05):
         inputData = self.__getInputData()[0]
         inputData =  [inputData[0], inputData[1], inputData[2] - value, inputData[3] + value, inputData[4], inputData[5]]
         self.__setInputData(inputData)
@@ -303,6 +317,15 @@ class InputWin(QWidget):
                                     "All Files (*);;Text Files (*.txt)") #设置文件扩展名过滤,注意用双分号间隔
         self.titleEdit.setText(fileName1)
 
+    def resetClick(self):
+        initial_p = ParameterItem("initial parameter")
+        self.aEdit.setText(str(initial_p.a))
+        self.bEdit.setText(str(initial_p.b))
+        self.cEdit.setText(str(initial_p.c))
+        self.dEdit.setText(str(initial_p.d))
+        self.a_downEdit.setText(str(initial_p.a_down))
+        self.b_downEdit.setText(str(initial_p.b_down))
+
     def perviewClick(self):
         pictureName = 'preview.png'
         inputData = self.__getInputData()[0]
@@ -315,56 +338,62 @@ class InputWin(QWidget):
 
         self.inputGroup0 = QGroupBox()
         self.inputGroup0.setLayout(QHBoxLayout())
-        self._parameterButton = QRadioButton("parameter")
-        self._txtButton = QRadioButton("txt")
+        self._parameterButton = QRadioButton("Parameter")
+        self._txtButton = QRadioButton("NDVI seris File(.txt)")
         self._parameterButton.setChecked(True)
         self._parameterButton.toggled.connect(self.toggledClicked)
         self.inputGroup0.layout().addWidget(self._parameterButton)
         self.inputGroup0.layout().addWidget(self._txtButton)
-        self.inputGroup0.setTitle('Select which mode is used')
+        self.inputGroup0.setTitle('Select one import method')
 
+        initial_p = ParameterItem("initial parameter")
         self.aEdit = QTextEdit()
-        self.aEdit.setText('10')
+        self.aEdit.setText(str(initial_p.a))
         self.aEdit.setFixedSize(80, 30)
         aLable = QLabel('a:')
         aLable.setFixedSize(30, 30)
 
         self.bEdit = QTextEdit()
-        self.bEdit.setText('-0.007')
+        self.bEdit.setText(str(initial_p.b))
         self.bEdit.setFixedSize(80, 30)
         bLable = QLabel('b:')
         bLable.setFixedSize(30, 30)
 
         self.cEdit = QTextEdit()
-        self.cEdit.setText('0.7')
+        self.cEdit.setText(str(initial_p.c))
         self.cEdit.setFixedSize(80, 30)
         cLable = QLabel('c:')
         cLable.setFixedSize(30, 30)
 
         self.dEdit = QTextEdit()
-        self.dEdit.setText('0.1')
+        self.dEdit.setText(str(initial_p.d))
         self.dEdit.setFixedSize(80, 30)
         dLable = QLabel('d:')
         dLable.setFixedSize(30, 30)
 
         self.a_downEdit = QTextEdit()
         self.a_downEdit.setFixedSize(80, 30)
-        self.a_downEdit.setText('-24.3')
+        self.a_downEdit.setText(str(initial_p.a_down))
         a_downLabel = QLabel('a_down:')
         a_downLabel.setFixedSize(80, 30)
 
         self.b_downEdit = QTextEdit()
         self.b_downEdit.setFixedSize(80, 30)
-        self.b_downEdit.setText('0.009')
+        self.b_downEdit.setText(str(initial_p.b_down))
         b_downLabel = QLabel('b_down:')
         b_downLabel.setFixedSize(80, 30)
 
         self.weigthEdit = QTextEdit()
         self.weigthEdit.setFixedSize(80, 30)
-        self.weigthEdit.setText('1')
-        weigthLabel = QLabel('weigth:')
+        self.weigthEdit.setText('0.5')
+        weigthLabel = QLabel('weight:')
         weigthLabel.setFixedSize(80, 30)
 
+        self.threEdit = QTextEdit()
+        self.threEdit.setFixedSize(80, 30)
+        self.threEdit.setText('0.09')
+        threLabel = QLabel('threshold:')
+        threLabel.setFixedSize(80, 30)
         '''
         vbox.addWidget(a_downLabel, 2, 0)
         vbox.addWidget(a_downEdit, 2, 1)
@@ -390,15 +419,17 @@ class InputWin(QWidget):
         hbox2.addWidget(self.b_downEdit)
         hbox2.addWidget(weigthLabel)
         hbox2.addWidget(self.weigthEdit)
+        hbox2.addWidget(threLabel)
+        hbox2.addWidget(self.threEdit)
 
         vbox = QVBoxLayout()
         vbox.setDirection(vbox.Up)
         vbox.addLayout(hbox2)
         vbox.addLayout(hbox1)
 
-        NDVIPath = QLabel('NDVIPath:')
+        NDVIPath = QLabel('Path:')
         self.titleEdit = QLineEdit()
-        pathInputButton = QPushButton("Input path")
+        pathInputButton = QPushButton("Open")
         pathInputButton.clicked.connect(self.inputPath)
 
         hbox3 = QHBoxLayout()
@@ -408,16 +439,16 @@ class InputWin(QWidget):
         hbox3.addWidget(pathInputButton)
 
         self.inputGroup1 = QGroupBox()
-        self.inputGroup1.setTitle('Input MIDI parameter')
+        self.inputGroup1.setTitle('Input NDVI simulation parameter')
         self.inputGroup1.setLayout(vbox)
-        self.inputGroup1.setFixedSize(self.width(), 200)
+        # self.inputGroup2.setFixedSize(self.width(), 200)
 
         self.inputGroup2 = QGroupBox()
-        self.inputGroup2.setTitle('Input MIDI TXT')
+        self.inputGroup2.setTitle('Input NDVI seris')
         self.inputGroup2.setLayout(hbox3)
-        self.inputGroup2.setFixedSize(self.width(), 100)
+        # self.inputGroup2.setFixedSize(self.width(), 100)
 
-        self.okButton = QPushButton("confirm")
+        self.okButton = QPushButton("Confirm")
         self.okButton.setFixedSize(80, 30)
         self.okButton.clicked.connect(self.confirmClick)
         self.cancelButton = QPushButton("Cancel")
@@ -426,14 +457,19 @@ class InputWin(QWidget):
         self.previewlButton = QPushButton("Preview")
         self.previewlButton.setFixedSize(80, 30)
         self.previewlButton.clicked.connect(self.perviewClick)
+        self.resetButton = QPushButton("Reset")
+        self.resetButton.setFixedSize(80, 30)
+        self.resetButton.clicked.connect(self.resetClick)
 
         hbox4 = QHBoxLayout()
         hbox4.addStretch(1)
         hbox4.addWidget(self.previewlButton)
+        hbox4.addWidget(self.resetButton)
         hbox4.addWidget(self.okButton)
         hbox4.addWidget(self.cancelButton)
         self.inputGroup3 = QGroupBox()
         self.inputGroup3.setLayout(hbox4)
+        self.inputGroup3.setTitle('Action Buttons')
         '''
         inputGroup4 = QGroupBox()
         vbox2 = QVBoxLayout()
@@ -446,19 +482,43 @@ class InputWin(QWidget):
         '''
         self.previewPicture = QLabel()
         self.previewPicture.setFixedSize(450,400)
-        self.Btn_GUDtime = QPushButton("GUD time shift")
-        self.Btn_GUDtime.clicked.connect(lambda: self.__timeShiftClick(value=100))
-        self.Btn_NDVImax = QPushButton("mix NDVI shift")
-        self.Btn_NDVImax.clicked.connect(lambda: self.__NDVImaxShiftClick(value=0.1))
-        self.Btn_NDVImin = QPushButton("min NDVI shift")
-        self.Btn_NDVImin.clicked.connect(lambda: self.__NDVIminShiftClick(value=0.1))
+        self.Btn_GUDtime = QPushButton("GUD time right shift")
+        self.Btn_GUDtime.clicked.connect(lambda: self.__timeShiftClick(value=60))
+        self.Btn_NDVImax = QPushButton("mix NDVI Down")
+        self.Btn_NDVImax.clicked.connect(lambda: self.__NDVImaxShiftClick(value=0.05))
+        self.Btn_NDVImin = QPushButton("min NDVI Up")
+        self.Btn_NDVImin.clicked.connect(lambda: self.__NDVIminShiftClick(value=0.05))
+
+        self.Btn_GUDtime_vers = QPushButton("GUD time left shift")
+        self.Btn_GUDtime_vers.clicked.connect(lambda: self.__timeShiftClick(value=-60))
+        self.Btn_NDVImax_vers = QPushButton("mix NDVI Up")
+        self.Btn_NDVImax_vers.clicked.connect(lambda: self.__NDVImaxShiftClick(value=-0.05))
+        self.Btn_NDVImin_vers = QPushButton("min NDVI Down")
+        self.Btn_NDVImin_vers.clicked.connect(lambda: self.__NDVIminShiftClick(value=-0.05))
 
         self.inputGroup4 = QGroupBox()
+
+        inputGroup4left = QGroupBox()
+        inputGroup4left.setTitle("Preview Image")
+        inputGroup4leftLayout = QHBoxLayout()
+        inputGroup4leftLayout.addWidget(self.previewPicture)
+        inputGroup4left.setLayout(inputGroup4leftLayout)
+
+        self.inputGroup4right = QGroupBox()
+        self.inputGroup4right.setTitle("Change NDVI Seris Buttons")
+        inputGroup4rightLayout = QVBoxLayout()
+        inputGroup4rightLayout.addWidget(self.Btn_GUDtime)
+        inputGroup4rightLayout.addWidget(self.Btn_GUDtime_vers)
+        inputGroup4rightLayout.addWidget(self.Btn_NDVImax)
+        inputGroup4rightLayout.addWidget(self.Btn_NDVImax_vers)
+        inputGroup4rightLayout.addWidget(self.Btn_NDVImin_vers)
+        inputGroup4rightLayout.addWidget(self.Btn_NDVImin)
+
+        self.inputGroup4right.setLayout(inputGroup4rightLayout)
+
         hbox5 = QHBoxLayout()
-        hbox5.layout().addWidget(self.previewPicture)
-        hbox5.layout().addWidget(self.Btn_GUDtime)
-        hbox5.layout().addWidget(self.Btn_NDVImax)
-        hbox5.layout().addWidget(self.Btn_NDVImin)
+        hbox5.layout().addWidget(inputGroup4left)
+        hbox5.layout().addWidget(self.inputGroup4right)
         self.inputGroup4.setLayout(hbox5)
 
         self.setGeometry(300, 300, self.width(), 500)
@@ -471,7 +531,7 @@ class InputWin(QWidget):
         self.layout().addWidget(self.inputGroup3)
         self.layout().addWidget(self.inputGroup4)
         self.inputGroup2.setEnabled(False)
-        self.setWindowTitle('Review')
+        self.setWindowTitle('Import')
         self.show()
 
 if __name__ == '__main__':

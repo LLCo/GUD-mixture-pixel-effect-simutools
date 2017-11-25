@@ -69,7 +69,7 @@ def drawPreview(parameter,name):
 def __drawThree(totalLine,GUDthre,threValue,thre):
         
     plt.figure(figsize=(5, 3))
-    plt.title('GUD caculate')
+    plt.title('GUD calculate by threshold')
     plt.xlabel('Day of year')
     plt.ylabel('NDVI')
     plt.plot(range(len(totalLine)),totalLine,'r-',lw = 2,label='orin')
@@ -78,7 +78,7 @@ def __drawThree(totalLine,GUDthre,threValue,thre):
     plt.axvline(GUDthre,ls = '--',lw = 3,label='GUD: ' + str(int(GUDthre/10)) + ' day')
     plt.axhline(threValue,ls = '--',lw = 2,color = 'r',label='%' + str(thre * 100) + ' NDVI')
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
-    plt.xticks(np.int16(np.linspace(0,3657,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
+    plt.xticks(np.int16(np.linspace(0,3659,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
     plt.legend(loc ='upper left')
     plt.savefig("drawThree.png")
 
@@ -92,7 +92,7 @@ def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同�
         5、返青期直线
     '''
     plt.figure(figsize=(5, 3))
-    plt.title('GUD caculate')
+    plt.title('GUD calculate by curvature')
     plt.xlabel('Day of year')
     plt.ylabel('NDVI')
     plt.plot(range(len(orin)),orin,'r-',lw = 2,label='orin')
