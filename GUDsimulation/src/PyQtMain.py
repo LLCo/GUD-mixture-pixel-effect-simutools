@@ -12,8 +12,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QHBoxLayout, QListWidget, QPushButton, QVBoxLayout, QGroupBox,\
     QLabel, QTextEdit, QMessageBox, QRadioButton, QApplication, QLineEdit, QFileDialog,QGridLayout
 from Main import *
+import txt_ndviseris_read
 import sys
-
 
 class ParameterItem(QListWidgetItem):
 
@@ -275,7 +275,7 @@ class InputWin(QWidget):
 
         else:
             reply = QMessageBox.information(self,  # 使用infomation信息框
-                                            self.titleEdit.text(),
+                                            self.pathEdit.text(),
                                             "this module hasn's finished",
                                             QMessageBox.Yes)
 
@@ -288,7 +288,7 @@ class InputWin(QWidget):
             a_down = self.a_downEdit.toPlainText()
             b_down = self.b_downEdit.toPlainText()
             weigth = self.weigthEdit.toPlainText()
-            str = 'a: ' + a + ' b: ' + b + ' c: ' + c + ' d: ' + d + ' a_down: ' + a_down + ' b_down: ' + b_down\
+            tstr = 'a: ' + a + ' b: ' + b + ' c: ' + c + ' d: ' + d + ' a_down: ' + a_down + ' b_down: ' + b_down\
                 +' Weight: ' + weigth
             a = float(a)
             b = float(b)
@@ -297,15 +297,28 @@ class InputWin(QWidget):
             a_down = float(a_down)
             b_down = float(b_down)
             weigth = float(weigth)
-            thisItem = ParameterItem(str,a=a,b=b,c=c,d=d,a_down=a_down,b_down=b_down,weight=weigth)
+            thisItem = ParameterItem(tstr,a=a,b=b,c=c,d=d,a_down=a_down,b_down=b_down,weight=weigth)
             self.context.view.addItem(thisItem)
             print('Do Parameter Method!')
 
         else:
+            '''
             reply = QMessageBox.information(self,  # 使用infomation信息框
-                                            self.titleEdit.text(),
+                                            self.pathEdit.text(),
                                             "this module hasn's finished",
                                             QMessageBox.Yes)
+            '''
+            parameters = txt_ndviseris_read.readtxt(self.pathEdit.text())
+            a = round(parameters[0], 3)
+            b = round(parameters[1], 3)
+            c = round(parameters[2], 3)
+            d = round(parameters[3], 3)
+            a_down = round(parameters[4], 3)
+            b_down = round(parameters[5], 3)
+            weigth = 1
+            tstr = self.pathEdit.text()
+            thisItem = ParameterItem(tstr, a=a, b=b, c=c, d=d, a_down=a_down, b_down=b_down, weight=weigth)
+            self.context.view.addItem(thisItem)
 
     def cancerClick(self):
         self.close()
@@ -315,7 +328,7 @@ class InputWin(QWidget):
                                     "Select File",
                                     "C:/",
                                     "All Files (*);;Text Files (*.txt)") #设置文件扩展名过滤,注意用双分号间隔
-        self.titleEdit.setText(fileName1)
+        self.pathEdit.setText(fileName1)
 
     def resetClick(self):
         initial_p = ParameterItem("initial parameter")
@@ -327,12 +340,18 @@ class InputWin(QWidget):
         self.b_downEdit.setText(str(initial_p.b_down))
 
     def perviewClick(self):
-        pictureName = 'preview.png'
-        inputData = self.__getInputData()[0]
-        drawPreview(inputData, pictureName)
-        previewPicture = QPixmap(pictureName)
-        self.previewPicture.setPixmap(previewPicture)
-        print("hello~ This is perview Click!")
+        if self._parameterButton.isChecked():
+            pictureName = 'preview.png'
+            inputData = self.__getInputData()[0]
+            drawPreview(inputData, pictureName)
+            previewPicture = QPixmap(pictureName)
+            self.previewPicture.setPixmap(previewPicture)
+            print("hello~ This is perview Click!")
+        else:
+            txtPath = self.pathEdit.text()
+            self.parameters = txt_ndviseris_read.readtxt(txtPath)
+            previewPicture = QPixmap('preview.png')
+            self.previewPicture.setPixmap(previewPicture)
 
     def initUI(self):
 
@@ -428,14 +447,14 @@ class InputWin(QWidget):
         vbox.addLayout(hbox1)
 
         NDVIPath = QLabel('Path:')
-        self.titleEdit = QLineEdit()
+        self.pathEdit = QLineEdit()
         pathInputButton = QPushButton("Open")
         pathInputButton.clicked.connect(self.inputPath)
 
         hbox3 = QHBoxLayout()
         hbox3.setSpacing(5)
         hbox3.addWidget(NDVIPath)
-        hbox3.addWidget(self.titleEdit)
+        hbox3.addWidget(self.pathEdit)
         hbox3.addWidget(pathInputButton)
 
         self.inputGroup1 = QGroupBox()

@@ -62,24 +62,30 @@ def Logistic_regress(x,y,p0):
     plsq = leastsq(residuals, p0, args=(y, x)) #maxfev = 1000
     return plsq[0]
 
-def curve_fit(NDVI):
-    
-    p0Up = [10,-0.007,0.7,0.1]
-    p0Down = [-27,0.009,0.7,0.1]
+
+def curve_fit(NDVI, x=None, p0Up=None, p0Down=None):
+
+    if p0Up is None:
+        p0Up = [10, -0.007, 0.7, 0.1]
+
+    if p0Down is None:
+        p0Down = [-27,0.009,0.7,0.1]
 
     Num = len(NDVI)
     NDVI_max_index=np.argmax(NDVI)
     Y_NDVI1=NDVI[0:NDVI_max_index]
     Y_NDVI2=NDVI[NDVI_max_index:]
-    x = np.arange(0,Num,1)
+
+    if x is None:
+        x = np.arange(0, Num, 1)
     
-    regress_parameter_up = Logistic_regress(x[0:NDVI_max_index],Y_NDVI1,p0Up)
-    regress_parameter_down = Logistic_regress(x[NDVI_max_index:],Y_NDVI2,p0Down)
+    regress_parameter_up = Logistic_regress(x[0:NDVI_max_index], Y_NDVI1, p0Up)
+    regress_parameter_down = Logistic_regress(x[NDVI_max_index:], Y_NDVI2, p0Down)
     # print(regress_parameter_up)
     # print(regress_parameter_down)
   
-    regress_line_up = peval(range(Num),regress_parameter_up)
-    regress_line_down = peval(range(Num),np.array(regress_parameter_down))
+    regress_line_up = peval(range(Num), regress_parameter_up)
+    regress_line_down = peval(range(Num), np.array(regress_parameter_down))
 
     totalLine = timeseris.merge_lines(regress_line_up, regress_line_down)
     

@@ -188,7 +188,7 @@ def main(input_value, fa = [0.3,0.3,0.4],thre = 0.09, txt_flag = False):
     原始光谱的GUD
     '''
     __drawThree(totalLine,GUDthre,threValue,thre) #画出第一条显示的图像
-    
+
     GUDothers = []
     GUDthreothers = []
     for i in range(mixline.shape[0] - 1):
