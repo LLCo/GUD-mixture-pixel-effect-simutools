@@ -15,10 +15,11 @@ from Main import *
 import txt_ndviseris_read
 import sys
 
+
 class ParameterItem(QListWidgetItem):
 
-    def __init__(self, str, a=11.105, b=-0.008, c=0.7, d=0.1, a_down=-24.3, b_down=0.009, weight=1):
-        QListWidgetItem.__init__(self, str)
+    def __init__(self, tstr, a=11.105, b=-0.008, c=0.7, d=0.1, a_down=-24.3, b_down=0.009, weight=1.0, threshold=0.09):
+        QListWidgetItem.__init__(self, tstr)
         self.a = a
         self.b = b
         self.c = c
@@ -26,7 +27,8 @@ class ParameterItem(QListWidgetItem):
         self.a_down = a_down
         self.b_down = b_down
         self.weight = weight
-        self.parameter = [a,b,c,d,a_down,b_down]
+        self.parameter = [a, b, c, d, a_down, b_down]
+        self.threshold = threshold
 
 
 class PyQtMain(QWidget):
@@ -168,8 +170,10 @@ class PyQtMain(QWidget):
             item = self.view.item(i)
             inputList.append(item.parameter)
             weightList.append(item.weight)
+            threshold = item.threshold
+
         weightList = list(map(lambda x:x/sum(weightList), weightList))
-        [GUDmix, GUDothers, GUDthre, GUDthreothers] = main(inputList, fa=weightList)
+        [GUDmix, GUDothers, GUDthre, GUDthreothers] = main(inputList, fa=weightList, thre=threshold)
         pixMap1 = QPixmap('drawOne.png')
         pixMap2 = QPixmap('drawTwo.png')
         pixMap3 = QPixmap('drawThree.png')
@@ -280,6 +284,8 @@ class InputWin(QWidget):
                                             QMessageBox.Yes)
 
     def confirmClick(self):
+        weigth = self.weigthEdit.toPlainText()
+        threshold = float(self.threEdit.toPlainText())
         if self._parameterButton.isChecked():
             a = self.aEdit.toPlainText()
             b = self.bEdit.toPlainText()
@@ -287,7 +293,7 @@ class InputWin(QWidget):
             d = self.dEdit.toPlainText()
             a_down = self.a_downEdit.toPlainText()
             b_down = self.b_downEdit.toPlainText()
-            weigth = self.weigthEdit.toPlainText()
+
             tstr = 'a: ' + a + ' b: ' + b + ' c: ' + c + ' d: ' + d + ' a_down: ' + a_down + ' b_down: ' + b_down\
                 +' Weight: ' + weigth
             a = float(a)
@@ -297,9 +303,6 @@ class InputWin(QWidget):
             a_down = float(a_down)
             b_down = float(b_down)
             weigth = float(weigth)
-            thisItem = ParameterItem(tstr,a=a,b=b,c=c,d=d,a_down=a_down,b_down=b_down,weight=weigth)
-            self.context.view.addItem(thisItem)
-            print('Do Parameter Method!')
 
         else:
             '''
@@ -315,10 +318,12 @@ class InputWin(QWidget):
             d = round(parameters[3], 3)
             a_down = round(parameters[4], 3)
             b_down = round(parameters[5], 3)
-            weigth = 1
             tstr = self.pathEdit.text()
-            thisItem = ParameterItem(tstr, a=a, b=b, c=c, d=d, a_down=a_down, b_down=b_down, weight=weigth)
-            self.context.view.addItem(thisItem)
+            weigth = float(weigth)
+
+        thisItem = ParameterItem(tstr, a=a, b=b, c=c, d=d, a_down=a_down,\
+                                 b_down=b_down, weight=weigth, threshold=threshold)
+        self.context.view.addItem(thisItem)
 
     def cancerClick(self):
         self.close()
@@ -326,7 +331,7 @@ class InputWin(QWidget):
     def inputPath(self):
         fileName1, filetype = QFileDialog.getOpenFileName(self,
                                     "Select File",
-                                    "C:/",
+                                    "./",
                                     "All Files (*);;Text Files (*.txt)") #设置文件扩展名过滤,注意用双分号间隔
         self.pathEdit.setText(fileName1)
 
@@ -412,39 +417,34 @@ class InputWin(QWidget):
         self.threEdit.setFixedSize(80, 30)
         self.threEdit.setText('0.09')
         threLabel = QLabel('threshold:')
-        threLabel.setFixedSize(80, 30)
+        threLabel.setFixedSize(60, 30)
         '''
         vbox.addWidget(a_downLabel, 2, 0)
         vbox.addWidget(a_downEdit, 2, 1)
         vbox.addWidget(b_downLabel, 2, 2)
         vbox.addWidget(b_downEdit, 2, 3)
         '''
-        hbox1 = QHBoxLayout()
-        hbox1.setSpacing(5)
-        hbox1.addWidget(aLable)
-        hbox1.addWidget(self.aEdit)
-        hbox1.addWidget(bLable)
-        hbox1.addWidget(self.bEdit)
-        hbox1.addWidget(cLable)
-        hbox1.addWidget(self.cEdit)
-        hbox1.addWidget(dLable)
-        hbox1.addWidget(self.dEdit)
-
-        hbox2 = QHBoxLayout()
-        hbox2.setSpacing(5)
-        hbox2.addWidget(a_downLabel)
-        hbox2.addWidget(self.a_downEdit)
-        hbox2.addWidget(b_downLabel)
-        hbox2.addWidget(self.b_downEdit)
+        '''
         hbox2.addWidget(weigthLabel)
         hbox2.addWidget(self.weigthEdit)
         hbox2.addWidget(threLabel)
         hbox2.addWidget(self.threEdit)
+        '''
 
-        vbox = QVBoxLayout()
-        vbox.setDirection(vbox.Up)
-        vbox.addLayout(hbox2)
-        vbox.addLayout(hbox1)
+        vbox = QGridLayout()
+        vbox.setSpacing(10)
+        vbox.addWidget(aLable, 1, 1)
+        vbox.addWidget(self.aEdit, 1, 2)
+        vbox.addWidget(bLable, 1, 3)
+        vbox.addWidget(self.bEdit, 1, 4)
+        vbox.addWidget(cLable, 1, 5)
+        vbox.addWidget(self.cEdit, 1, 6)
+        vbox.addWidget(dLable, 2, 1)
+        vbox.addWidget(self.dEdit, 2, 2)
+        vbox.addWidget(a_downLabel, 2, 3)
+        vbox.addWidget(self.a_downEdit, 2, 4)
+        vbox.addWidget(b_downLabel, 2, 5)
+        vbox.addWidget(self.b_downEdit, 2, 6)
 
         NDVIPath = QLabel('Path:')
         self.pathEdit = QLineEdit()
@@ -519,8 +519,13 @@ class InputWin(QWidget):
 
         inputGroup4left = QGroupBox()
         inputGroup4left.setTitle("Preview Image")
-        inputGroup4leftLayout = QHBoxLayout()
-        inputGroup4leftLayout.addWidget(self.previewPicture)
+        inputGroup4leftLayout = QGridLayout()
+        inputGroup4leftLayout.setSpacing(10)
+        inputGroup4leftLayout.addWidget(self.previewPicture, 2, 1, 1, 4)
+        inputGroup4leftLayout.addWidget(weigthLabel, 1, 1)
+        inputGroup4leftLayout.addWidget(self.weigthEdit, 1, 2)
+        inputGroup4leftLayout.addWidget(threLabel, 1, 3)
+        inputGroup4leftLayout.addWidget(self.threEdit, 1, 4)
         inputGroup4left.setLayout(inputGroup4leftLayout)
 
         self.inputGroup4right = QGroupBox()

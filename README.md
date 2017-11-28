@@ -1,2 +1,4 @@
 # GUDsimulation
-Python UI learning program
+simulate GUD change effect by mix piexl.
+
+environment: anaconda, pyqt5
