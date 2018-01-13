@@ -103,7 +103,7 @@ def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同�
     plt.xticks(np.int16(np.linspace(0,3660,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
     ax1 = plt.gca()
     ax2 = ax1.twinx()  # this is the important function
-    ax2.plot(range(len(derivative)),derivative,'--',label='frist D')
+    ax2.plot(range(len(derivative)),derivative,'--',label='first D')
     ax2.plot(range(len(derivative2)),derivative2,'--',label='second D')
     ax2.plot(range(len(derivative3)),derivative3,'-',lw = 2,label='third D')
     ax1.legend(loc ='upper left')
