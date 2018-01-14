@@ -1,10 +1,17 @@
 from Main import *
 import batchCalculator
 import timeseris
-import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.colors as pcolor
+from matplotlib.patches import Rectangle
+from mpl_toolkits.axes_grid1.colorbar import colorbar
 import numpy as np
+
+
+def __shade_color__(n, color=(1, 1, 1)):
+    for i in range(n):
+        yield((color[0], color[1]*(i/n), 1 -color[2]*(i/n)))
+    return color
+
 
 def mixPattern():
     """
@@ -222,7 +229,7 @@ def advanceDetection():
     return
 
 
-def __advanceDetection():
+def advanceDetection_much():
 
     N = 25
     u = 110
@@ -262,14 +269,251 @@ def __advanceDetection():
     plt.show()
 
 
-def advanceChangeDetection():
+def advanceChangeDetection_reason():
+
+    AlineP = batchCalculator.initialAParameterList
+    BlineP = batchCalculator.initialBParameterList
+    Bline = timeseris.get_initial_line(BlineP[0], BlineP[1], BlineP[2], BlineP[3], BlineP[4], BlineP[5], 3660)
+    Aline = timeseris.get_initial_line(AlineP[0], AlineP[1], AlineP[2], AlineP[3], AlineP[4], AlineP[5], 3660)
+
+    Blines = np.zeros((3660, 5))
+    Alines = np.zeros((3660, 5))
+    shiftDays = -np.linspace(0, 20, 5)
+    shiftDaysUp = AlineP[0] + shiftDays * -AlineP[1] * 10
+    shiftDaysDown = AlineP[4] + shiftDays * -AlineP[5] * 10
+    for i in range(5):
+        Alines[:, i] = timeseris.get_initial_line(shiftDaysUp[i], AlineP[1], AlineP[2], AlineP[3], shiftDaysDown[i],
+                                                  AlineP[5], 3660)
+    shiftDays = np.linspace(0, 20, 5)
+    shiftDaysUp = BlineP[0] + shiftDays * -BlineP[1] * 10
+    shiftDaysDown = BlineP[4] + shiftDays * -BlineP[5] * 10
+    for i in range(5):
+        Blines[:, i] = timeseris.get_initial_line(shiftDaysUp[i], BlineP[1], BlineP[2], BlineP[3], shiftDaysDown[i],
+                                                  BlineP[5], 3660)
+
+    pcolor = __shade_color__(5)
+    plt.figure(figsize=(12, 8))
+    plt.subplot(2, 2, 1)
+
+    for index, val in enumerate(__shade_color__(5)):
+        plt.plot(Alines[:, index], label=str(index) + 'th A line', color=val)
+    plt.plot(Bline, label='B line')
+    plt.ylabel('mix GUD')
+    plt.title('A line(delta GUD) & B line')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.legend(loc='best')
+
+    plt.subplot(2, 2, 2)
+    for index, val in enumerate(__shade_color__(5)):
+        plt.plot((Alines[:, index] + Bline)/2, label=str(index) + 'th mix line', color=val)
+    plt.ylabel('NDVI')
+    plt.title('mix line change with delta GUD')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    rect = Rectangle((700, 0.1), 1000, 0.3, alpha=1, edgecolor="r", facecolor="white", zorder=-1, linestyle="--", lw=4)
+    plt.gca().add_patch(rect)
+    plt.legend(loc='best')
+
+    plt.subplot(2, 2, 3)
+    for index, val in enumerate(__shade_color__(5)):
+        plt.plot(Blines[:, index], label=str(index) + 'th A line', color=val)
+    plt.plot(Aline, label='A line')
+    plt.xlabel('Month of year')
+    plt.ylabel('mix GUD')
+    plt.title('A line & B line(delta GUD)')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.legend(loc='best')
+
+    plt.subplot(2, 2, 4)
+    for index, val in enumerate(__shade_color__(5)):
+        plt.plot((Blines[:, index] + Bline)/2, label=str(index) + 'th mix line', color=val)
+    plt.xlabel('Month of year')
+    plt.ylabel('NDVI')
+    plt.title('mix line change with delta GUD')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.legend(loc='best')
+    rect = Rectangle((1000, 0.1), 1000, 0.3, alpha=1, edgecolor="r", facecolor="white", zorder=-1, linestyle="--", lw=4)
+    plt.gca().add_patch(rect)
+    plt.show()
 
     return
+
+
+def advanceChangeDetection_show():
+    AlineP = batchCalculator.initialAParameterList
+    BlineP = batchCalculator.initialBParameterList
+    Bline = timeseris.get_initial_line(BlineP[0], BlineP[1], BlineP[2], BlineP[3], BlineP[4], BlineP[5], 3660)
+    Aline = timeseris.get_initial_line(AlineP[0], AlineP[1], AlineP[2], AlineP[3], AlineP[4], AlineP[5], 3660)
+    N = 11
+    Alines = np.zeros((3660, N))
+    shiftDays = np.linspace(-20, 20, N)
+    print(shiftDays)
+    shiftDaysUp = AlineP[0] + shiftDays * -AlineP[1] * 10
+    shiftDaysDown = AlineP[4] + shiftDays * -AlineP[5] * 10
+    for i in range(N):
+        Alines[:, i] = timeseris.get_initial_line(shiftDaysUp[i], AlineP[1], AlineP[2], AlineP[3], shiftDaysDown[i],
+                                                  AlineP[5], 3660)
+    plt.figure(1)
+    plt.plot(Alines, color='r', label='change line')
+    plt.plot(Aline, color='b', lw=4, ls='--', label='change line')
+    plt.xlabel("Month of years")
+    plt.ylabel("NDVI")
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.title("GUD Change Detection")
+    plt.show()
+    thre = 0.09
+    GUDs = np.zeros((10, 11, 2))
+    for i, fa in enumerate(np.linspace(0, 1, 10)):
+        for j in range(N):
+            line = Alines[:, j]
+            regress_line_up, regress_line_down, totalLine = logsticFit.curve_fit(line*fa + Aline*(1-fa))  # 获取到了拟合后的像素
+            [GUDs[i, j, 0], derivative, derivative2, derivative3] = GUDcaculate(regress_line_up)
+            [GUDs[i, j, 1], threValue] = GUDThreCaculate(line*fa + Aline*(1-fa), thre)
+    print(GUDs[:, :, 0])
+    GUDs = (GUDs[:, 1:, :] - GUDs[:, 0:-1, :]) / 40
+
+    plt.figure(figsize=(10, 8))
+    ax1 = plt.gca()
+    im2 = ax1.imshow(GUDs[:, :, 1])
+    cb1 = colorbar(im2, ax=ax1)
+    cb1.ax.set_yticks([0, 0.25, 0.5, 0.75, 0.1], ['0%', '25%', '50%', '75%', '100%'])
+    ax1.set_title("mix GUDs can show how much change of Veg A (Curvature)", size=10)
+    plt.ylabel("fa")
+    plt.xlabel("interval")
+    plt.xticks(np.linspace(0, 9, 6), np.linspace(-20, 20, 6), rotation=45)
+    plt.yticks(np.linspace(0, 9, 6), ['0%', '20%', '40%', '60%', '80%', '100%'], rotation=45)
+    plt.show()
+
+    plt.figure(figsize=(10, 8))
+    ax2 = plt.gca()
+    im2 = ax2.imshow(GUDs[:, :, 1])
+    cb2 = colorbar(im2, ax=ax2)
+    cb2.ax.set_yticks([0, 0.25, 0.5, 0.75, 0.1], ['0%', '25%', '50%', '75%', '100%'])
+    ax2.set_title("mix GUDs can show how much change of Veg A (Threshold)", size=10)
+    plt.ylabel("fa")
+    plt.xlabel("interval")
+    plt.xticks(np.linspace(0, 9, 6), np.linspace(-20, 20, 6), rotation=45)
+    plt.yticks(np.linspace(0, 9, 6), ['0%', '20%', '40%', '60%', '80%', '100%'], rotation=45)
+    plt.show()
+
+
+def advanceChangeDetection_show_fix():
+    AlineP = batchCalculator.initialAParameterList
+    BlineP = batchCalculator.initialBParameterList
+    Bline = timeseris.get_initial_line(BlineP[0], BlineP[1], BlineP[2], BlineP[3], BlineP[4], BlineP[5], 3660)
+    Aline = timeseris.get_initial_line(AlineP[0], AlineP[1], AlineP[2], AlineP[3], AlineP[4], AlineP[5], 3660)
+    N = 11
+    Alines = np.zeros((3660, N))
+    shiftDays = np.linspace(-20, 20, N)
+    shiftDaysUp = AlineP[0] + shiftDays * -AlineP[1] * 10
+    shiftDaysDown = AlineP[4] + shiftDays * -AlineP[5] * 10
+    for i in range(N):
+        Alines[:, i] = timeseris.get_initial_line(shiftDaysUp[i], AlineP[1], AlineP[2], AlineP[3], shiftDaysDown[i],
+                                                  AlineP[5], 3660)
+    plt.figure(1)
+    plt.plot(Alines, color='r', label='change line')
+    plt.plot(Aline, color='b', lw=4, ls='--', label='change line')
+    plt.xlabel("Month of years")
+    plt.ylabel("NDVI")
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']
+    plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.title("GUD Change Detection")
+    plt.show()
+    thre = 0.09
+    GUDs = np.zeros((11, 11, 2))
+    for i, fa in enumerate(np.linspace(0, 1, 11)):
+        for j in range(N):
+            line = Alines[:, j]
+            fb = 1 - fa
+            regress_line_up, regress_line_down, totalLine = logsticFit.curve_fit(line*fb + Aline*(1-fb))  # 获取到了拟合后的像素
+            [GUDs[i, j, 0], derivative, derivative2, derivative3] = GUDcaculate(regress_line_up)
+            [GUDs[i, j, 1], threValue] = GUDThreCaculate(line*fb + Aline*(1-fb), thre)
+    print(GUDs[:, :, 0])
+    GUDs = (GUDs[:, 1:, :] - GUDs[:, 0:-1, :]) / 40
+
+    plt.figure(figsize=(10, 8))
+    ax1 = plt.gca()
+    im2 = ax1.imshow(GUDs[:, :, 0])
+    cb1 = colorbar(im2, ax=ax1)
+    cb1.ax.set_yticks([0, 0.25, 0.5, 0.75, 1], ['0%', '25%', '50%', '75%', '100%'])
+    ax1.set_title("mix GUDs can show how much change of Veg A (Curvature)", size=10)
+    plt.ylabel("fa")
+    plt.xlabel("interval")
+    plt.xticks(np.linspace(0, 9, 6), np.linspace(-20, 20, 6), rotation=45)
+    plt.yticks(np.linspace(0, 10, 6), ['100%', '80%', '60%', '40%', '20%', '0%'], rotation=45)
+    plt.show()
+
+    plt.figure(figsize=(10, 8))
+    ax2 = plt.gca()
+    im2 = ax2.imshow(GUDs[:, :, 1])
+    cb2 = colorbar(im2, ax=ax2)
+    cb2.ax.set_yticks([0, 0.25, 0.5, 0.75, 1], ['0%', '25%', '50%', '75%', '100%'])
+    ax2.set_title("mix GUDs can show how much change of Veg A (Threshold)", size=10)
+    plt.ylabel("fa")
+    plt.xlabel("interval")
+    plt.xticks(np.linspace(0, 9, 6), np.linspace(-20, 20, 6), rotation=45)
+    plt.yticks(np.linspace(0, 10, 6), ['100%', '80%', '60%', '40%', '20%', '0%'], rotation=45)
+    plt.show()
+
+
+def advanceChangeDetection_line_show():
+
+    AlineP = batchCalculator.initialAParameterList
+    Aline = timeseris.get_initial_line(AlineP[0], AlineP[1], AlineP[2], AlineP[3], AlineP[4], AlineP[5], 3660)
+    N = 11
+    Alines = np.zeros((3660, N))
+    shiftDays = np.linspace(-30, 30, N)
+    shiftDaysUp = AlineP[0] + shiftDays * -AlineP[1] * 10
+    shiftDaysDown = AlineP[4] + shiftDays * -AlineP[5] * 10
+    for i in range(N):
+        Alines[:, i] = timeseris.get_initial_line(shiftDaysUp[i], AlineP[1], AlineP[2], AlineP[3], shiftDaysDown[i],
+                                                  AlineP[5], 3660)
+
+    thre = 0.09
+    GUDs = np.zeros((3, N, 2))
+    for i, fa in enumerate([0.25, 0.5, 0.75]):
+        for j in range(N):
+            line = Alines[:, j]
+            regress_line_up, regress_line_down, totalLine = logsticFit.curve_fit(line*fa + Aline*(1-fa))  # 获取到了拟合后的像素
+            [GUDs[i, j, 0], derivative, derivative2, derivative3] = GUDcaculate(regress_line_up)
+            [GUDs[i, j, 1], threValue] = GUDThreCaculate(line*fa + Aline*(1-fa), thre)
+    print(GUDs[:, :, 0])
+    GUDs = GUDs / 10
+
+    plt.figure()
+    plt.plot(shiftDays + 110, lw=4, label='veg A')
+    plt.plot(np.zeros(11) + 110, lw=4, label='veg B')
+    plt.plot(GUDs[0, :, 0], ls='--', label='fa = 25%', marker='o')
+    plt.plot(GUDs[1, :, 0], ls='--', label='fa = 50%', marker='^')
+    plt.plot(GUDs[2, :, 0], ls='--', label='fa = 75%', marker='v')
+    plt.xlabel("Time")
+    plt.ylabel("GUD")
+    plt.title("GUD change with Time (curvature)")
+    plt.xticks([0, 10], ['start', 'end'])
+    plt.legend()
+    plt.show()
+
+    plt.figure()
+    plt.plot(shiftDays + 110, lw=4, label='veg A')
+    plt.plot(np.zeros(11) + 110, lw=4, label='veg B')
+    plt.plot(GUDs[0, :, 1], ls='--', label='fa = 25%', marker='o')
+    plt.plot(GUDs[1, :, 1], ls='--', label='fa = 50%', marker='^')
+    plt.plot(GUDs[2, :, 1], ls='--', label='fa = 75%', marker='v')
+    plt.xlabel("Time")
+    plt.ylabel("GUD")
+    plt.title("GUD change with Time (threshold)")
+    plt.xticks([0, 10], ['start', 'end'])
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     # mixPattern()
     # GUDderive()
     # advanceReason()
-    advanceDetection()
     # __advanceDetection()
+    advanceChangeDetection_show_fix()
     print("end!")
