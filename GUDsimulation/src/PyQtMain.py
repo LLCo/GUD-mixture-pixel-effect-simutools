@@ -75,7 +75,7 @@ class PyQtMain(QWidget):
         inputGroup0 = QGroupBox()
         inputGroup0.setLayout(self.qgl)
         inputGroup0.setFixedSize(220, 450)
-        inputGroup0.setTitle('NDVI Time Seris')
+        inputGroup0.setTitle('NDVI Time Series')
 
         self.Btn_Draw = QPushButton('Draw')
         self.Btn_Draw.clicked.connect(self.btndraw)
@@ -363,7 +363,7 @@ class InputWin(QWidget):
         self.inputGroup0 = QGroupBox()
         self.inputGroup0.setLayout(QHBoxLayout())
         self._parameterButton = QRadioButton("Parameter")
-        self._txtButton = QRadioButton("NDVI seris File(.txt)")
+        self._txtButton = QRadioButton("NDVI Series File(.txt)")
         self._parameterButton.setChecked(True)
         self._parameterButton.toggled.connect(self.toggledClicked)
         self.inputGroup0.layout().addWidget(self._parameterButton)
@@ -463,7 +463,7 @@ class InputWin(QWidget):
         # self.inputGroup2.setFixedSize(self.width(), 200)
 
         self.inputGroup2 = QGroupBox()
-        self.inputGroup2.setTitle('Input NDVI seris')
+        self.inputGroup2.setTitle('Input NDVI Series')
         self.inputGroup2.setLayout(hbox3)
         # self.inputGroup2.setFixedSize(self.width(), 100)
 
@@ -529,7 +529,7 @@ class InputWin(QWidget):
         inputGroup4left.setLayout(inputGroup4leftLayout)
 
         self.inputGroup4right = QGroupBox()
-        self.inputGroup4right.setTitle("Change NDVI Seris Buttons")
+        self.inputGroup4right.setTitle("Change NDVI Series Buttons")
         inputGroup4rightLayout = QVBoxLayout()
         inputGroup4rightLayout.addWidget(self.Btn_GUDtime)
         inputGroup4rightLayout.addWidget(self.Btn_GUDtime_vers)

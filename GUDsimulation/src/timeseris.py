@@ -28,8 +28,8 @@ def merge_lines(timeSerisUp, timeSerisDown):
 
 
 def get_initial_line(a=10, b=-0.07, c=0.7, d=0.1, a_down=-27, b_down=0.09,STEP = 366):
-    timeseris_up = get_logistic_line(a, b, c, d,time=STEP)
-    timeseris_down = get_logistic_line(a_down, b_down, c, d,time=STEP)
+    timeseris_up = get_logistic_line(a, b, c, d, time=STEP)
+    timeseris_down = get_logistic_line(a_down, b_down, c, d, time=STEP)
     timeseris_merge = merge_lines(timeseris_up, timeseris_down)
 
     return timeseris_merge
