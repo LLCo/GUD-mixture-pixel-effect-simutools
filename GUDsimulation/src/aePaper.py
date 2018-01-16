@@ -46,7 +46,6 @@ def firstPic():
     plt.xlim([0, 3660])
     plt.xticks(np.linspace(0, 3660, 5), ['', '', '', '', ''])
 
-
     plt.subplot(2, 2, 2)
     plt.axhline(0.9, lw=2, color="#75bbfd")
     plt.axhline(0.8, lw=2, color="#ffb07c")
