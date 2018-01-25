@@ -110,5 +110,5 @@ def secondPic():
 
 if __name__ == "__main__":
     # firstPic()
-    secondPic()
+    firstPic()
     print("end!")
