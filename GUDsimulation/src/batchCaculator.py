@@ -228,7 +228,6 @@ def miss_dynamic_detection_contourmap():
     mat_curvas_minus = -np.round(mat_curvas_minus * 5)
     mat_curvas_minus[np.where(mat_curvas_minus > 5)] = 5
     mat_curvas_minus = np.int8(mat_curvas_minus)
-
     plt.figure(figsize=(10, 8))
     plt.xlabel('delta GUD')
     plt.ylabel('disturb proportion (%)')
