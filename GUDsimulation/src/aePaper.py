@@ -281,6 +281,7 @@ def fifthPic():
     plt.plot((shiftDays + np.zeros(11)) * 0.5 + 110, lw=2, ls='--', label='50%', color='black')
     plt.plot(GUDs[5, :, 0], ls='-', label='fa = 50%', marker='v', color='black')
     plt.ylabel("GUD", FontProperties=font)
+    plt.xlabel("Interval -20 -> 20", prop=font)
     plt.xticks([0, 10], ['start', 'end'])
     plt.title("(a)", FontProperties=font)
 
@@ -290,6 +291,7 @@ def fifthPic():
     plt.plot([0, 10], [GUDs[0, 0, 0], GUDs[-1, 0, 0]], ls='--', label="field detection ( deltaGUD = -20)", color='black')
     plt.plot([0, 10], [GUDs[0, -1, 0], GUDs[-1, -1, 0]], ls='--', label="field detection ( deltaGUD = 20)", color='black')
     plt.ylabel("GUD", FontProperties=font)
+    plt.xlabel("fa 0% -> 100%", props=font)
     plt.title("(b)", FontProperties=font)
     plt.xticks([0, 10], ['start', 'end'])
 
@@ -307,6 +309,7 @@ def fifthPic():
     plt.xticks([0, 9], ['start', 'end'])
     plt.ylabel("Fa", FontProperties=font)
     plt.title("(c)", FontProperties=font)
+    plt.xlabel("Interval -20 -> 20", props=font)
     plt.yticks(np.linspace(0, 10, 6), ['100%', '80%', '60%', '40%', '20%', '0%'], rotation=45)
 
     intervalChangeGUDs = np.abs((GUDs[1:, :, 0] - GUDs[0:-1, :, 0]))-np.abs((GUDsField[1:, :] - GUDsField[0:-1, :]))
@@ -319,6 +322,7 @@ def fifthPic():
     plt.ylabel("Interval", FontProperties=font)
     plt.title("(d)", FontProperties=font)
     plt.xticks([0, 9], ['start', 'end'])
+    plt.xlabel("fa 0% -> 100%", props=font)
     plt.yticks(np.linspace(0, 10, 6), np.linspace(20, -20, 6), rotation=45)
     plt.show()
 
