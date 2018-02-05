@@ -8,10 +8,12 @@ import numpy as np
 from matplotlib.font_manager import FontProperties
 font = FontProperties(fname=r"C:\\WINDOWS\\Fonts\\times.ttf", size=14)#C:\WINDOWS\Fonts
 
+
 def __shade_color__(n, color=(1, 1, 1)):
     for i in range(n):
         yield((color[0], color[1]*(i/n), 1 -color[2]*(i/n)))
     return color
+
 
 def firstPic():
 
@@ -51,7 +53,6 @@ def firstPic():
     plt.ylim([0, 1])
     plt.xlim([0, 3660])
     plt.xticks(np.linspace(0, 3660, 5), ['', '', '', '', ''])
-
 
     plt.subplot(2, 2, 2)
     plt.axhline(0.9, lw=2, color="#75bbfd")
@@ -329,8 +330,11 @@ def fifthPic():
     plt.axhline(0.9, lw=2, color="#75bbfd")
     plt.axhline(0.8, lw=2, color="#ffb07c")
 
+
 if __name__ == "__main__":
     # firstPic()
     # secondPic()
+    # thirdPic()
+    # forthPic()
     fifthPic()
     print("end!")

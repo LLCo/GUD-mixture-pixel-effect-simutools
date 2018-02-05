@@ -198,11 +198,11 @@ class PyQtMain(QWidget):
                    str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])+\
                    ' Weight: ' + str(weightList[i])
             self.console.append(tstr)
-            self.console.append(tstr0 + "'s threshold GUD is :" + str(GUDothers[i] / 10) + 'day')
-            self.console.append(tstr0 + "'s curvature GUD is :" + str(GUDthreothers[i]/10) + 'day\n')
+            self.console.append(tstr0 + "'s curvature GUD is :" + str(GUDothers[i] / 10) + 'day')
+            self.console.append(tstr0 + "'s threshold GUD is :" + str(GUDthreothers[i]/10) + 'day\n')
 
-        self.console.append("Mix threshold GUD is :" + str(GUDmix/10) + 'day')
-        self.console.append("Mix curvature GUD is :" + str(GUDthre/10) + 'day')
+        self.console.append("Mix curvature GUD is :" + str(GUDmix/10) + 'day')
+        self.console.append("Mix threshold GUD is :" + str(GUDthre/10) + 'day')
 
 
 class InputWin(QWidget):
