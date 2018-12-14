@@ -19,7 +19,7 @@ from lib.Main import *
 
 class ParameterItem(QListWidgetItem):
 
-    def __init__(self, tstr, a=11.105, b=-0.008, c=0.7, d=0.1, a_down=-24.3, b_down=0.009, weight=1.0, threshold=0.09):
+    def __init__(self, tstr, a=11.105, b=-0.08, c=0.7, d=0.1, a_down=-24.3, b_down=0.09, weight=1.0, threshold=0.09):
         QListWidgetItem.__init__(self, tstr)
         self.a = a
         self.b = b
@@ -57,8 +57,6 @@ class PyQtMain(QWidget):
         self.view = QListWidget(self)
         self.view.setFixedSize(200,300)
         self.view.setWindowTitle('Honey-Do List')
-        # Create an empty model for the list's data
-        #self.view.setModel(self.model)
 
         self.Btn_import = QPushButton('Import')
         self.Btn_import.clicked.connect(self.btnimport)
@@ -144,7 +142,6 @@ class PyQtMain(QWidget):
         weightList = []
         inputList = []
         for i in range(itemNums):
-            #item = self.view.takeItem(0)
             item = self.view.item(i)
             inputList.append(item.parameter)
             weightList.append(item.weight)
@@ -166,7 +163,7 @@ class PyQtMain(QWidget):
         self.plotLabel3.setPixmap(QPixmap())
         self.console.setText('')
 
-    def consoleOperation(self,inputList,weightList,GUDmix,GUDothers, GUDthre, GUDthreothers):
+    def consoleOperation(self,inputList,weightList, GUDmix, GUDothers, GUDthre, GUDthreothers):
         self.console.append("--------------------------------------")
         for i in range(len(GUDothers)):
             tstr0 = 'The ' + str(i+1) + 'th line'
@@ -176,11 +173,11 @@ class PyQtMain(QWidget):
                    str(inputList[i][4]) + ' b_down: ' + str(inputList[i][5])+\
                    ' Weight: ' + str(weightList[i])
             self.console.append(tstr)
-            self.console.append(tstr0 + "'s curvature GUD is :" + str(GUDothers[i] / 10) + 'day')
-            self.console.append(tstr0 + "'s threshold GUD is :" + str(GUDthreothers[i]/10) + 'day\n')
+            self.console.append(tstr0 + "'s curvature GUD is :" + str(np.round(GUDothers[i], 2)) + 'day')
+            self.console.append(tstr0 + "'s threshold GUD is :" + str(np.round(GUDthreothers[i], 2)) + 'day\n')
 
-        self.console.append("Mix curvature GUD is :" + str(GUDmix/10) + 'day')
-        self.console.append("Mix threshold GUD is :" + str(GUDthre/10) + 'day')
+        self.console.append("Mix curvature GUD is :" + str(np.round(GUDmix, 2)) + 'day')
+        self.console.append("Mix threshold GUD is :" + str(np.round(GUDthre, 2)) + 'day')
 
     # delete PNG when exit.
     def closeEvent(self, QCloseEvent):
@@ -352,7 +349,6 @@ class InputWin(QWidget):
             self.previewPicture.setPixmap(previewPicture)
 
     def initUI(self):
-
         self.inputGroup0 = QGroupBox()
         self.inputGroup0.setLayout(QHBoxLayout())
         self._parameterButton = QRadioButton("Parameter")
@@ -408,7 +404,7 @@ class InputWin(QWidget):
 
         self.threEdit = QTextEdit()
         self.threEdit.setFixedSize(80, 30)
-        self.threEdit.setText('0.09')
+        self.threEdit.setText('0.092')
         threLabel = QLabel('threshold:')
         threLabel.setFixedSize(60, 30)
 
@@ -474,14 +470,14 @@ class InputWin(QWidget):
         self.previewPicture = QLabel()
         self.previewPicture.setFixedSize(450,400)
         self.Btn_GUDtime = QPushButton("GUD time right shift")
-        self.Btn_GUDtime.clicked.connect(lambda: self.__timeShiftClick(value=60))
+        self.Btn_GUDtime.clicked.connect(lambda: self.__timeShiftClick(value=5))
         self.Btn_NDVImax = QPushButton("mix NDVI Down")
         self.Btn_NDVImax.clicked.connect(lambda: self.__NDVImaxShiftClick(value=0.05))
         self.Btn_NDVImin = QPushButton("min NDVI Up")
         self.Btn_NDVImin.clicked.connect(lambda: self.__NDVIminShiftClick(value=0.05))
 
         self.Btn_GUDtime_vers = QPushButton("GUD time left shift")
-        self.Btn_GUDtime_vers.clicked.connect(lambda: self.__timeShiftClick(value=-60))
+        self.Btn_GUDtime_vers.clicked.connect(lambda: self.__timeShiftClick(value=-5))
         self.Btn_NDVImax_vers = QPushButton("mix NDVI Up")
         self.Btn_NDVImax_vers.clicked.connect(lambda: self.__NDVImaxShiftClick(value=-0.05))
         self.Btn_NDVImin_vers = QPushButton("min NDVI Down")

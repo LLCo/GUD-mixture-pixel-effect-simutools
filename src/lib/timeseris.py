@@ -8,8 +8,10 @@ import matplotlib.pyplot as plt
 
 initialAParameter = {'a': 10, 'b': -0.07, 'c': 0.7, 'd': 0.1, 'a_down': -27, 'b_down': 0.09}
 initialBParameter = {'a': 12.1, 'b': -0.07, 'c': 0.7, 'd': 0.1, 'a_down': -29.7, 'b_down': 0.09}
+TIME = 365
 
-def get_logistic_line(a, b, c, d, time=366):
+
+def get_logistic_line(a, b, c, d, time=TIME):
     time = np.arange(0, time, 1)
     exp_value = np.exp(a + b * time)
     timeseris = c / (1 + exp_value) + d
@@ -27,7 +29,7 @@ def merge_lines(timeSerisUp, timeSerisDown):
     return (temp)
 
 
-def get_initial_line(a=10, b=-0.07, c=0.7, d=0.1, a_down=-27, b_down=0.09,STEP = 366):
+def get_initial_line(a=10, b=-0.07, c=0.7, d=0.1, a_down=-27, b_down=0.09, STEP=TIME):
     timeseris_up = get_logistic_line(a, b, c, d, time=STEP)
     timeseris_down = get_logistic_line(a_down, b_down, c, d, time=STEP)
     timeseris_merge = merge_lines(timeseris_up, timeseris_down)
