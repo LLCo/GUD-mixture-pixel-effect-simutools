@@ -2,8 +2,8 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-import logsticFit
 
+from lib import logsticFit
 
 '''
 line = timeseris.get_initial_line(a=11.105, b=-0.008, c=0.7, d=0.1, a_down=-24.3, b_down=0.009, STEP=3660)
@@ -23,6 +23,7 @@ def readtxt(fname='./NDVI time seris test.txt'):
         NDVI.append(float(words[1]))
         # print(day[i], ' ', NDVI[i])
     return fit(NDVI, day)
+
 
 def fit(NDVI, day):
 
@@ -53,7 +54,7 @@ def fit(NDVI, day):
     plt.legend(loc='upper left')
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
     plt.xticks(np.int16(np.linspace(0, 3660, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
-    plt.savefig('preview.png')
+    plt.savefig('data/preview.png')
     return regress_parameter
 
 

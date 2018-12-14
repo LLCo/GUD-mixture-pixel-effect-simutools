@@ -9,8 +9,9 @@ Function:
 """
 import matplotlib.pyplot as plt
 import numpy as np
-import timeseris
-import logsticFit
+
+from lib import timeseris
+from lib import logsticFit
 
 
 def getFirstMaxValue(line):
@@ -22,12 +23,14 @@ def getFirstMaxValue(line):
             valTemp = line[i]
     return(-1)
 
+
 def GUDThreCaculate(timeSeris, thre = 0.09):
     threValue = (np.max(timeSeris) - np.min(timeSeris)) * thre + np.min(timeSeris)
     for i in range(len(timeSeris)):
         if timeSeris[i] > threValue:
             return [i, threValue]
     return
+
 
 def GUDcaculate(timeSeris):
     shape = np.shape(timeSeris)
@@ -42,9 +45,10 @@ def GUDcaculate(timeSeris):
     derivative3 = (1 / max(abs(derivative3))) * derivative3
     GUD = getFirstMaxValue(derivative3)
     
-    return [GUD,derivative,derivative2,derivative3]
-    
-def drawPreview(parameter,name):
+    return [GUD, derivative, derivative2, derivative3]
+
+
+def drawPreview(parameter, name):
     STEP = 3660
     line = timeseris.get_initial_line(
         parameter[0], \
@@ -65,9 +69,10 @@ def drawPreview(parameter,name):
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
     plt.xticks(np.int16(np.linspace(0,3660,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
     plt.savefig(name)
+    pass
+
 
 def __drawThree(totalLine,GUDthre,threValue,thre):
-        
     plt.figure(figsize=(5, 3))
     plt.title('GUD calculate by threshold')
     plt.xlabel('Day of year')
@@ -80,7 +85,9 @@ def __drawThree(totalLine,GUDthre,threValue,thre):
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
     plt.xticks(np.int16(np.linspace(0,3659,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
     plt.legend(loc ='upper left')
-    plt.savefig("drawThree.png")
+    plt.savefig("data\drawThree.png")
+    pass
+
 
 def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同的原始曲线
     '''
@@ -108,8 +115,8 @@ def __drawTwo(GUD,derivative,derivative2,derivative3,orin,STEP):# 画出不同�
     ax2.plot(range(len(derivative3)),derivative3,'-',lw = 2,label='third D')
     ax1.legend(loc ='upper left')
     ax2.legend(loc ='upper right')
-    plt.savefig("drawTwo.png")
-    #plt.show()
+    plt.savefig("data\drawTwo.png")
+
 
 def __drawOne(mixline,totalLine,STEP):# 画出不同的原始曲线
     '''
@@ -134,9 +141,9 @@ def __drawOne(mixline,totalLine,STEP):# 画出不同的原始曲线
     plt.legend(loc ='upper left')
     label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
     plt.xticks(np.int16(np.linspace(0,3660,5)), [label[0],label[3],label[6],label[9],label[12]], rotation=45)
-    plt.savefig("drawOne.png")
-    #plt.show()
-    
+    plt.savefig("data\drawOne.png")
+
+
 def __read_txt(txt_path,STEP):
     '''
     输入原始NDVI时序数据，获得混合曲线
@@ -144,6 +151,7 @@ def __read_txt(txt_path,STEP):
     array = np.arange(0,STEP,1)
     # print(txt_path);
     return array
+
 
 def allOrinTimeseris(input_value, STEP, fa = [0.3,0.3,0.4]):
     '''
@@ -168,6 +176,7 @@ def allOrinTimeseris(input_value, STEP, fa = [0.3,0.3,0.4]):
     mixline = np.row_stack((onelines,mixline))
     
     return mixline
+
 
 def main(input_value, fa = [0.3,0.3,0.4],thre = 0.09, txt_flag = False):
     STEP = 3660
