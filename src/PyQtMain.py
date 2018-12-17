@@ -154,7 +154,7 @@ class PyQtMain(QWidget):
         self.plotLabel1.setPixmap(pixMap1)
         self.plotLabel2.setPixmap(pixMap2)
         self.plotLabel3.setPixmap(pixMap3)
-        self.consoleOperation(inputList,weightList,GUDmix,GUDothers, GUDthre, GUDthreothers)
+        self.consoleOperation(inputList, weightList, GUDmix, GUDothers, GUDthre, GUDthreothers)
 
     def clearClick(self):
         self.plotLabel1.setPixmap(QPixmap())
@@ -305,7 +305,10 @@ class InputWin(QWidget):
                                             "this module hasn's finished",
                                             QMessageBox.Yes)
             '''
-            parameters = tnr.read_soiltxt(self.pathEdit.text())
+            if self._soilButton.isChecked():
+                parameters = tnr.read_soiltxt(self.pathEdit.text())
+            else:
+                parameters = tnr.readtxt(self.pathEdit.text())
             a = round(parameters[0], 3)
             b = round(parameters[1], 3)
             c = round(parameters[2], 3)
