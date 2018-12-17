@@ -25,6 +25,34 @@ def readtxt(fname='./NDVI time seris test.txt'):
     return fit(NDVI, day)
 
 
+def read_soiltxt(fname):
+    day = []
+    NDVI = []
+    fobj = open(fname, 'r')
+    for i, eachline in enumerate(fobj):
+        words = eachline.split()
+        day.append(int(words[0]))
+        NDVI.append(float(words[1]))
+    NDVI = np.array(NDVI)
+    soil_edvi = NDVI.mean()
+
+    plt.figure(figsize=(4.5, 3))
+    # plt.plot(day, fit_curve, 'r', lw=2, label='fit line')
+    plt.axhline(soil_edvi, color='r', lw=2, label='fit line')
+    plt.plot(day, NDVI, 'b', lw=2, label='original line')
+    plt.ylim([0, 1])
+    plt.xlim([0, 365])
+    plt.title('preview')
+    plt.xlabel('Month of year')
+    plt.ylabel('NDVI')
+    plt.legend(loc='upper left')
+    label = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan']
+    plt.xticks(np.int16(np.linspace(0, 365, 5)), [label[0], label[3], label[6], label[9], label[12]], rotation=45)
+    plt.savefig('data/preview.png')
+
+    return [0, 1, 0, soil_edvi, 0, 1]
+
+
 def fit(NDVI, day):
 
     NDVI = np.array(NDVI)

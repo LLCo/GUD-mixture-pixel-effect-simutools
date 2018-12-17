@@ -4,8 +4,8 @@
 """
 simulation software ：Calculate the mix pixel affect of GUD inversion
 
-Author: Liu Li cong
-Last edited: Nov 2017
+Author:
+Last edited: Nov 2018
 """
 
 import sys
@@ -65,7 +65,6 @@ class PyQtMain(QWidget):
         self.Btn_delete = QPushButton('Delete')
         self.Btn_delete.clicked.connect(self.btndelete)
         self.Btn_delete.setFixedSize(200, 40)
-
 
         self.qgl = QVBoxLayout()
         self.qgl.addWidget(self.view)
@@ -207,11 +206,16 @@ class InputWin(QWidget):
             self.inputGroup2.setEnabled(False)
             self.inputGroup4right.setEnabled(True)
             print('_parameterButton')
-        else:
-            self.inputGroup2.setEnabled(True)
+        elif self._txtButton.isChecked():
             self.inputGroup1.setEnabled(False)
+            self.inputGroup2.setEnabled(True)
             self.inputGroup4right.setEnabled(False)
             print('_txtButton')
+        elif self._soilButton.isChecked():
+            self.inputGroup1.setEnabled(False)
+            self.inputGroup2.setEnabled(True)
+            self.inputGroup4right.setEnabled(False)
+            print('_soilButton')
 
     def __timeShiftClick(self, value=60):
         inputData = self.__getInputData()[0]
@@ -301,7 +305,7 @@ class InputWin(QWidget):
                                             "this module hasn's finished",
                                             QMessageBox.Yes)
             '''
-            parameters = tnr.readtxt(self.pathEdit.text())
+            parameters = tnr.read_soiltxt(self.pathEdit.text())
             a = round(parameters[0], 3)
             b = round(parameters[1], 3)
             c = round(parameters[2], 3)
@@ -342,9 +346,14 @@ class InputWin(QWidget):
             previewPicture = QPixmap(pictureName)
             self.previewPicture.setPixmap(previewPicture)
             print("hello~ This is perview Click!")
-        else:
+        elif self._txtButton.isChecked():
             txtPath = self.pathEdit.text()
             self.parameters = tnr.readtxt(txtPath)
+            previewPicture = QPixmap('data\preview.png')
+            self.previewPicture.setPixmap(previewPicture)
+        elif self._soilButton.isChecked():
+            txtPath = self.pathEdit.text()
+            self.parameters = tnr.read_soiltxt(txtPath)
             previewPicture = QPixmap('data\preview.png')
             self.previewPicture.setPixmap(previewPicture)
 
@@ -353,10 +362,16 @@ class InputWin(QWidget):
         self.inputGroup0.setLayout(QHBoxLayout())
         self._parameterButton = QRadioButton("Parameter")
         self._txtButton = QRadioButton("NDVI Series File(.txt)")
+        self._soilButton = QRadioButton("Soil Line")
         self._parameterButton.setChecked(True)
+
         self._parameterButton.toggled.connect(self.toggledClicked)
+        self._txtButton.toggled.connect(self.toggledClicked)
+        self._soilButton.toggled.connect(self.toggledClicked)
+
         self.inputGroup0.layout().addWidget(self._parameterButton)
         self.inputGroup0.layout().addWidget(self._txtButton)
+        self.inputGroup0.layout().addWidget(self._soilButton)
         self.inputGroup0.setTitle('Select one import method')
 
         initial_p = ParameterItem("initial parameter")
@@ -440,7 +455,7 @@ class InputWin(QWidget):
         # self.inputGroup2.setFixedSize(self.width(), 200)
 
         self.inputGroup2 = QGroupBox()
-        self.inputGroup2.setTitle('Input NDVI Series')
+        self.inputGroup2.setTitle('Input NDVI Series (.txt)')
         self.inputGroup2.setLayout(hbox3)
         # self.inputGroup2.setFixedSize(self.width(), 100)
 

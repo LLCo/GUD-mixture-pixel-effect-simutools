@@ -15,6 +15,10 @@ from lib.curvature_gud import Phenology
 
 
 def GUDThreCaculate(timeSeris, thre=0.09):
+
+    if np.max(timeSeris) - np.min(timeSeris) < 0.05:
+        return -1, -1
+
     threValue = (np.max(timeSeris) - np.min(timeSeris)) * thre + np.min(timeSeris)
     for i in range(len(timeSeris)):
         if timeSeris[i] > threValue:
@@ -25,6 +29,8 @@ def GUDThreCaculate(timeSeris, thre=0.09):
 
 def GUDcaculate(timeSeris):
 
+    if np.max(timeSeris) - np.min(timeSeris) < 0.05:
+        return -1, np.linspace(0, 365, len(timeSeris)), timeSeris
     phe = Phenology()
     GUD, _, _, curves = phe.simple_get(timeSeris, need_curves=True)  # result为gud, md, vi_gud, vi_md, rmse
     t, fit_curve = curves
